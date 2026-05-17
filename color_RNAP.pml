@@ -1,0 +1,9 @@
+# RNAP: Monttinen core  40/48 (83%)
+load /home/torres/monttinen_core/1HQM_C.pdb, RNAP
+color gray70, all
+hide everything, all
+show cartoon, all
+color blue, RNAP and resi 144+146+147+160+161+162+163+169+172+173+174+176+184+185+186+187+188+189+191+288+392+406+411+412+439+444+453+459+460+461+630+669+683+686+687+688+838+839+841+842
+show sticks, RNAP and resi 144+146+147+160+161+162+163+169+172+173+174+176+184+185+186+187+188+189+191+288+392+406+411+412+439+444+453+459+460+461+630+669+683+686+687+688+838+839+841+842
+bg_color white
+zoom RNAP
