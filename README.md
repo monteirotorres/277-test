@@ -47,7 +47,7 @@ Refazer e contestar análises do `report_ec277_nucleotidyltransferases.md` (gera
 |---|---|
 | `monttinen_core.py` | Script principal: download PDB, TM-align, parsing, detecção de core, geração de outputs |
 | `analise_tmalign_monttinen_corrigida.md` | Relatório completo com contestação quantitativa ao relatório original |
-| `monttinen_core_results.html` | Website interativo com KPIs, heatmap 7×48, strip de sequência, gráfico TM-score |
+| `index.html` | Website interativo com KPIs, heatmap 7×48, strip de sequência, gráfico TM-score (servido via GitHub Pages) |
 | `tmscore_summary.tsv` | TM-scores e RMSD dos 6 pares NTase↔fold |
 | `core_residues.tsv` | 48 resíduos do core ≥5/6, anotados por fold |
 | `presence_absence.tsv` | Presença/ausência por fold (% cobertura) |
@@ -83,7 +83,7 @@ Outputs gerados em `~/monttinen_core/`.
 
 ## Visualização
 
-- **Website:** abrir `monttinen_core_results.html` em qualquer browser moderno.
+- **Website:** https://monteirotorres.github.io/277-test/ (GitHub Pages) — ou abrir `index.html` localmente em qualquer browser moderno.
 - **PyMOL:** `File → Run Script → color_core.pml`.
 
 ---
