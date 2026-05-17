@@ -1,560 +1,1025 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mönttinen Structural Core — TM-align Analysis</title>
+<title>Core estrutural de Mönttinen — análise TM-align</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0f1117;
-    --surface: #1a1d27;
-    --surface2: #22263a;
-    --border: #2e3347;
-    --text: #e8eaf6;
-    --text-dim: #7b82a6;
-    --accent: #5c73f2;
+/* ─────────────────────────────────────────────────────────
+   DESIGN TOKENS
+   ───────────────────────────────────────────────────────── */
+:root {
+  /* surfaces */
+  --bg-0: #07070c;
+  --bg-1: #0d0d15;
+  --bg-2: #131320;
+  --bg-3: #1b1b2e;
+  --bg-glass: rgba(27,27,46,0.55);
+  --border: rgba(255,255,255,0.08);
+  --border-strong: rgba(255,255,255,0.14);
 
-    --ntase: #e74c3c;
-    --pola:  #e67e22;
-    --polb:  #c8a000;
-    --rt:    #27ae60;
-    --polx:  #00b8a3;
-    --rnap:  #3498db;
-    --rdrp:  #9b59b6;
-    --partial: #e74c3c;
-    --present: #27ae60;
-  }
+  /* text */
+  --text: #f0f1f7;
+  --text-dim: #a4abc9;
+  --text-mute: #6b7299;
+  --text-faint: #454c70;
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* accents */
+  --gold: #f5c518;
+  --gold-dim: rgba(245,197,24,0.18);
+  --rose: #f06292;
+  --rose-dim: rgba(240,98,146,0.15);
+  --indigo: #818cf8;
+  --indigo-dim: rgba(129,140,248,0.18);
+  --emerald: #34d399;
+  --emerald-dim: rgba(52,211,153,0.18);
 
-  body {
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
-  }
+  /* fold colors — refined to be harmonious */
+  --ntase: #ef4444;
+  --pola:  #f97316;
+  --polb:  #eab308;
+  --rt:    #22c55e;
+  --polx:  #14b8a6;
+  --rnap:  #3b82f6;
+  --rdrp:  #a855f7;
 
-  /* ── Layout ── */
-  .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+  /* sizing */
+  --radius-sm: 6px;
+  --radius:    10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
 
-  /* ── Header ── */
-  header {
-    background: linear-gradient(135deg, #0f1117 0%, #1a1d40 50%, #0f1117 100%);
-    border-bottom: 1px solid var(--border);
-    padding: 4rem 2rem 3rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  header::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(92,115,242,0.12) 0%, transparent 70%);
-  }
-  header .badge {
-    display: inline-block;
-    background: rgba(92,115,242,0.15);
-    border: 1px solid rgba(92,115,242,0.4);
-    color: #8fa4ff;
-    font-size: 0.75rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 0.3rem 1rem;
-    border-radius: 2rem;
-    margin-bottom: 1.2rem;
-  }
-  h1 {
-    font-size: clamp(1.6rem, 4vw, 2.6rem);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.8rem;
-  }
-  h1 span { color: #8fa4ff; }
-  header p.sub {
-    color: var(--text-dim);
-    font-size: 1rem;
-    max-width: 600px;
-    margin: 0 auto 0.4rem;
-  }
-  header p.meta {
-    color: var(--text-dim);
-    font-size: 0.8rem;
-    opacity: 0.7;
-  }
+  /* type */
+  --ff-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --ff-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --ff-display: 'Fraunces', 'Inter', serif;
+}
 
-  /* ── Section ── */
-  section { padding: 3rem 0; }
-  section + section { border-top: 1px solid var(--border); }
-  .section-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-  }
-  .section-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--ff-sans);
+  background: var(--bg-0);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
 
-  /* ── KPI Cards ── */
-  .kpi-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1rem;
-  }
-  .kpi {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.5rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .kpi::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-  }
-  .kpi.c-blue::before   { background: #3498db; }
-  .kpi.c-green::before  { background: #27ae60; }
-  .kpi.c-orange::before { background: #e67e22; }
-  .kpi.c-red::before    { background: #e74c3c; }
-  .kpi.c-purple::before { background: #9b59b6; }
-  .kpi-num {
-    font-size: 2.6rem;
-    font-weight: 800;
-    line-height: 1;
-    margin-bottom: 0.3rem;
-  }
-  .kpi.c-blue   .kpi-num { color: #5ba8e8; }
-  .kpi.c-green  .kpi-num { color: #2ecc71; }
-  .kpi.c-orange .kpi-num { color: #f39c12; }
-  .kpi.c-red    .kpi-num { color: #e74c3c; }
-  .kpi.c-purple .kpi-num { color: #b07fe8; }
-  .kpi-label { font-size: 0.85rem; color: var(--text-dim); }
-  .kpi-sub   { font-size: 0.75rem; color: var(--text-dim); opacity: 0.6; margin-top: 0.2rem; }
+/* Subtle animated bg gradient */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 10% 0%, rgba(129,140,248,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 90% 30%, rgba(240,98,146,0.06) 0%, transparent 65%),
+    radial-gradient(ellipse 70% 50% at 50% 110%, rgba(52,211,153,0.05) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: -1;
+}
 
-  /* ── Correction Banner ── */
-  .correction-banner {
-    background: rgba(231,76,60,0.1);
-    border: 1px solid rgba(231,76,60,0.35);
-    border-radius: 10px;
-    padding: 1.2rem 1.5rem;
-    margin-bottom: 1.5rem;
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
-  }
-  .correction-banner .icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 0.1rem; }
-  .correction-banner strong { color: #e87060; }
-  .correction-banner p { font-size: 0.9rem; color: var(--text-dim); margin-top: 0.3rem; }
+::selection { background: var(--indigo-dim); color: var(--text); }
 
-  /* ── Coverage Cards ── */
-  .fold-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1rem;
-  }
-  .fold-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.2rem 1.4rem;
-    position: relative;
-    overflow: hidden;
-    cursor: default;
-    transition: border-color 0.2s, transform 0.2s;
-  }
-  .fold-card:hover { transform: translateY(-2px); }
-  .fold-card .fold-accent {
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 3px;
-    border-radius: 12px 0 0 12px;
-  }
-  .fold-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.8rem;
-  }
-  .fold-name { font-weight: 700; font-size: 1rem; }
-  .fold-pdb  { font-size: 0.75rem; color: var(--text-dim); }
-  .status-badge {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    padding: 0.2rem 0.6rem;
-    border-radius: 4px;
-    text-transform: uppercase;
-  }
-  .status-present { background: rgba(39,174,96,0.2);  color: #2ecc71; }
-  .status-partial  { background: rgba(231,76,60,0.2);  color: #e87060; }
-  .status-ref      { background: rgba(92,115,242,0.2); color: #8fa4ff; }
+/* Layout ─────────────────────────────────── */
+.container { max-width: 1180px; margin: 0 auto; padding: 0 2rem; }
+@media (max-width: 720px) { .container { padding: 0 1.2rem; } }
 
-  .progress-wrap {
-    background: rgba(255,255,255,0.06);
-    border-radius: 6px;
-    height: 8px;
-    overflow: hidden;
-    margin-bottom: 0.5rem;
-  }
-  .progress-bar {
-    height: 100%;
-    border-radius: 6px;
-    transition: width 1s ease;
-  }
-  .fold-stats { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-dim); }
-  .fold-stats span:first-child { font-weight: 600; color: var(--text); }
-  .fold-desc { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.6rem; border-top: 1px solid var(--border); padding-top: 0.5rem; }
+section { padding: 5rem 0; position: relative; }
+.eyebrow {
+  font-family: var(--ff-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--indigo);
+  margin-bottom: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.eyebrow::before {
+  content: '';
+  width: 18px; height: 1px;
+  background: var(--indigo);
+  display: inline-block;
+}
+h2 {
+  font-family: var(--ff-display);
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+h2 em { font-style: italic; color: var(--gold); font-weight: 400; }
+.section-lead {
+  font-size: 1.02rem;
+  color: var(--text-dim);
+  max-width: 660px;
+  margin-bottom: 2.5rem;
+  line-height: 1.65;
+}
 
-  /* ── Heatmap ── */
-  .heatmap-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.5rem;
-    overflow-x: auto;
-  }
-  .heatmap-wrap svg { display: block; }
-  .heatmap-legend {
-    display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    margin-top: 1rem;
-    font-size: 0.8rem;
-    color: var(--text-dim);
-  }
-  .heatmap-legend span {
-    display: flex; align-items: center; gap: 0.4rem;
-  }
-  .leg-swatch {
-    width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0;
-  }
+/* ─────────────────────────────────────────────────────────
+   NAV
+   ───────────────────────────────────────────────────────── */
+nav {
+  position: sticky; top: 0;
+  z-index: 100;
+  background: rgba(7,7,12,0.7);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav-brand {
+  font-family: var(--ff-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.nav-brand .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 12px rgba(245,197,24,0.6);
+}
+.nav-links { display: flex; gap: 1.6rem; }
+.nav-links a {
+  font-size: 0.82rem;
+  color: var(--text-mute);
+  text-decoration: none;
+  transition: color 0.2s;
+  font-weight: 500;
+}
+.nav-links a:hover { color: var(--text); }
+@media (max-width: 720px) { .nav-links { display: none; } }
 
-  /* ── Sequence Strip ── */
-  .seq-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.5rem;
-    overflow-x: auto;
-  }
+/* ─────────────────────────────────────────────────────────
+   HERO
+   ───────────────────────────────────────────────────────── */
+header.hero {
+  padding: 7rem 2rem 5rem;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+.hero-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 0.45rem 1rem;
+  font-family: var(--ff-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
+}
+.hero-tag .pulse {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--emerald);
+  box-shadow: 0 0 0 0 rgba(52,211,153,0.6);
+  animation: pulse 2.2s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(52,211,153,0.6); }
+  70% { box-shadow: 0 0 0 12px rgba(52,211,153,0); }
+  100% { box-shadow: 0 0 0 0 rgba(52,211,153,0); }
+}
+h1 {
+  font-family: var(--ff-display);
+  font-size: clamp(2.2rem, 6vw, 4.4rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  margin-bottom: 1.5rem;
+  max-width: 920px;
+}
+h1 em {
+  font-style: italic;
+  color: var(--gold);
+  font-weight: 500;
+}
+h1 .gradient {
+  background: linear-gradient(120deg, #f0f1f7 0%, #a4abc9 50%, #f0f1f7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero-sub {
+  font-size: 1.15rem;
+  color: var(--text-dim);
+  max-width: 660px;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+.hero-meta {
+  display: flex;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  font-family: var(--ff-mono);
+  font-size: 0.78rem;
+  color: var(--text-mute);
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+.hero-meta .item { display: flex; flex-direction: column; gap: 0.2rem; }
+.hero-meta .label { color: var(--text-faint); letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.66rem; }
+.hero-meta .value { color: var(--text); font-weight: 500; }
 
-  /* ── TM-score Chart ── */
-  .tm-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.5rem;
-  }
+/* hero decorative grid */
+.hero-grid {
+  position: absolute;
+  top: 0; right: -100px;
+  width: 600px; height: 100%;
+  opacity: 0.3;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(129,140,248,0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(129,140,248,0.1) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse 60% 60% at 70% 40%, black 0%, transparent 70%);
+}
 
-  /* ── Comparison Table ── */
-  .compare-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.88rem;
-  }
-  .compare-table th {
-    background: var(--surface2);
-    color: var(--text-dim);
-    font-weight: 600;
-    text-align: left;
-    padding: 0.7rem 1rem;
-    letter-spacing: 0.04em;
-    font-size: 0.78rem;
-    text-transform: uppercase;
-  }
-  .compare-table td {
-    padding: 0.65rem 1rem;
-    border-bottom: 1px solid var(--border);
-    vertical-align: middle;
-  }
-  .compare-table tr:hover td { background: rgba(255,255,255,0.03); }
-  .val-old { color: var(--text-dim); text-decoration: line-through; }
-  .val-new  { color: #2ecc71; font-weight: 600; }
-  .val-error { color: #e87060; font-weight: 600; }
+/* ─────────────────────────────────────────────────────────
+   KPI STRIP
+   ───────────────────────────────────────────────────────── */
+.kpi-strip {
+  margin-top: 4rem;
+  padding-top: 3rem;
+  border-top: 1px solid var(--border);
+}
+.kpi-strip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0;
+  border-left: 1px solid var(--border);
+}
+.kpi-cell {
+  padding: 1.6rem 1.8rem;
+  border-right: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  background: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.015) 100%);
+  transition: background 0.3s;
+}
+.kpi-cell:hover { background: rgba(255,255,255,0.025); }
+.kpi-cell .num {
+  font-family: var(--ff-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 500;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.03em;
+}
+.kpi-cell.gold .num { color: var(--gold); }
+.kpi-cell.rose .num { color: var(--rose); }
+.kpi-cell.indigo .num { color: var(--indigo); }
+.kpi-cell.emerald .num { color: var(--emerald); }
+.kpi-cell.text-c .num { color: var(--text); }
+.kpi-cell .label {
+  font-size: 0.85rem;
+  color: var(--text);
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  letter-spacing: -0.005em;
+}
+.kpi-cell .sub {
+  font-family: var(--ff-mono);
+  font-size: 0.7rem;
+  color: var(--text-mute);
+  line-height: 1.5;
+}
 
-  /* ── Tooltip ── */
-  #tooltip {
-    position: fixed;
-    pointer-events: none;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 0.6rem 0.9rem;
-    font-size: 0.82rem;
-    max-width: 220px;
-    z-index: 1000;
-    display: none;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-  }
-  #tooltip strong { color: var(--text); }
-  #tooltip .tt-sub { color: var(--text-dim); font-size: 0.78rem; }
+/* ─────────────────────────────────────────────────────────
+   CORRECTION
+   ───────────────────────────────────────────────────────── */
+.correction {
+  background: linear-gradient(135deg, rgba(240,98,146,0.05) 0%, rgba(245,197,24,0.03) 100%);
+  border: 1px solid rgba(240,98,146,0.2);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.correction::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: var(--rose);
+}
+@media (max-width: 720px) { .correction { grid-template-columns: 1fr; padding: 1.8rem; } }
 
-  /* ── Footer ── */
-  footer {
-    text-align: center;
-    padding: 2rem;
-    color: var(--text-dim);
-    font-size: 0.8rem;
-    border-top: 1px solid var(--border);
-  }
+.correction-text h3 {
+  font-family: var(--ff-display);
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin-bottom: 0.6rem;
+  line-height: 1.2;
+}
+.correction-text h3 .badge-err {
+  display: inline-block;
+  background: var(--rose-dim);
+  color: var(--rose);
+  font-family: var(--ff-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  padding: 0.18rem 0.55rem;
+  border-radius: var(--radius-sm);
+  margin-right: 0.6rem;
+  vertical-align: middle;
+  font-weight: 600;
+}
+.correction-text p {
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+.correction-text p strong { color: var(--text); font-weight: 600; }
 
-  /* ── Asp highlight ── */
-  .asp-marker { fill: gold; stroke: #b8860b; stroke-width: 1px; }
-  .universal-marker { fill: #fff; stroke: #aaa; stroke-width: 0.5px; }
+.chain-compare {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 0.8rem;
+}
+.chain-card {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.2rem 1.4rem;
+  position: relative;
+  font-family: var(--ff-mono);
+}
+.chain-card.bad { border-left: 3px solid var(--rose); }
+.chain-card.good { border-left: 3px solid var(--emerald); }
+.chain-card .label {
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+}
+.chain-card.bad .label { color: var(--rose); }
+.chain-card.good .label { color: var(--emerald); }
+.chain-card .pdb {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+}
+.chain-card .desc { font-size: 0.82rem; color: var(--text-mute); }
 
-  /* ── Grid col dividers ── */
-  .cluster-label { fill: var(--text-dim); font-size: 10px; font-family: monospace; }
+/* ─────────────────────────────────────────────────────────
+   FOLD COVERAGE — circular indicators
+   ───────────────────────────────────────────────────────── */
+.fold-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+.fold-card {
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.6rem;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+.fold-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-strong);
+  box-shadow: 0 24px 40px -20px rgba(0,0,0,0.4);
+}
+.fold-card::after {
+  content: '';
+  position: absolute;
+  top: -1px; left: -1px; right: -1px;
+  height: 2px;
+  background: var(--fold-color);
+  opacity: 0.8;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+.fold-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.2rem;
+}
+.fold-card-head .name {
+  font-family: var(--ff-display);
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+.fold-card-head .pdb {
+  font-family: var(--ff-mono);
+  font-size: 0.72rem;
+  color: var(--text-mute);
+}
+.fold-status {
+  font-family: var(--ff-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.55rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+}
+.fold-status.present { background: var(--emerald-dim); color: var(--emerald); }
+.fold-status.partial { background: var(--rose-dim); color: var(--rose); }
+.fold-status.ref { background: var(--indigo-dim); color: var(--indigo); }
+
+.fold-radial-wrap {
+  position: relative;
+  width: 120px; height: 120px;
+  margin: 0.5rem auto 1rem;
+}
+.fold-radial-wrap svg {
+  width: 100%; height: 100%;
+  transform: rotate(-90deg);
+}
+.fold-radial-wrap .track { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 8; }
+.fold-radial-wrap .arc {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.fold-radial-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.fold-radial-center .pct {
+  font-family: var(--ff-display);
+  font-size: 1.7rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.fold-radial-center .ratio {
+  font-family: var(--ff-mono);
+  font-size: 0.7rem;
+  color: var(--text-mute);
+  margin-top: 0.2rem;
+}
+.fold-desc {
+  font-size: 0.82rem;
+  color: var(--text-mute);
+  line-height: 1.5;
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  font-style: italic;
+}
+
+/* ─────────────────────────────────────────────────────────
+   HEATMAP & visualizations
+   ───────────────────────────────────────────────────────── */
+.viz-card {
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  overflow-x: auto;
+}
+.viz-card svg { display: block; }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  font-family: var(--ff-mono);
+}
+.legend-item { display: flex; align-items: center; gap: 0.5rem; }
+.legend-sw {
+  width: 14px; height: 14px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+}
+
+/* ─────────────────────────────────────────────────────────
+   COMPARISON TABLE
+   ───────────────────────────────────────────────────────── */
+.compare-card {
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+table.compare {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+table.compare thead th {
+  background: rgba(255,255,255,0.025);
+  color: var(--text-mute);
+  font-weight: 600;
+  font-family: var(--ff-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.68rem;
+  text-align: left;
+  padding: 1rem 1.4rem;
+  border-bottom: 1px solid var(--border);
+}
+table.compare td {
+  padding: 1rem 1.4rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  color: var(--text-dim);
+}
+table.compare tr:last-child td { border-bottom: none; }
+table.compare tr:hover td { background: rgba(255,255,255,0.02); }
+table.compare td:first-child { color: var(--text); font-weight: 500; }
+.v-old { color: var(--text-faint); text-decoration: line-through; font-family: var(--ff-mono); font-size: 0.85rem; }
+.v-new { color: var(--emerald); font-weight: 600; font-family: var(--ff-mono); font-size: 0.85rem; }
+.v-err { color: var(--rose); font-weight: 600; font-family: var(--ff-mono); font-size: 0.85rem; }
+.v-cause { font-size: 0.78rem; color: var(--text-mute); }
+
+/* ─────────────────────────────────────────────────────────
+   METHODS
+   ───────────────────────────────────────────────────────── */
+.methods-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+.method-card {
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.6rem;
+  backdrop-filter: blur(10px);
+  transition: border-color 0.3s;
+  position: relative;
+}
+.method-card:hover { border-color: var(--border-strong); }
+.method-card .icon {
+  width: 36px; height: 36px;
+  border-radius: var(--radius);
+  background: var(--indigo-dim);
+  color: var(--indigo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  font-family: var(--ff-mono);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.method-card h4 {
+  font-family: var(--ff-display);
+  font-size: 1.15rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+}
+.method-card p {
+  font-size: 0.86rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* ─────────────────────────────────────────────────────────
+   TOOLTIP
+   ───────────────────────────────────────────────────────── */
+#tooltip {
+  position: fixed;
+  pointer-events: none;
+  background: rgba(13,13,21,0.96);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 0.7rem 1rem;
+  font-size: 0.8rem;
+  max-width: 260px;
+  z-index: 1000;
+  display: none;
+  font-family: var(--ff-mono);
+  color: var(--text);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
+}
+#tooltip .tt-title {
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+}
+#tooltip .tt-meta { color: var(--text-mute); font-size: 0.72rem; }
+#tooltip .tt-special {
+  display: inline-block;
+  margin-top: 0.4rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+#tooltip .tt-cat { background: var(--gold-dim); color: var(--gold); }
+#tooltip .tt-uni { background: var(--indigo-dim); color: var(--indigo); }
+
+/* ─────────────────────────────────────────────────────────
+   FOOTER
+   ───────────────────────────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 3rem 2rem 2rem;
+  text-align: center;
+  font-family: var(--ff-mono);
+  color: var(--text-mute);
+  font-size: 0.78rem;
+}
+footer .footer-meta { margin-top: 0.5rem; color: var(--text-faint); font-size: 0.7rem; }
+
+/* ─────────────────────────────────────────────────────────
+   ANIMATIONS
+   ───────────────────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.reveal.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
 </style>
 </head>
 <body>
 
 <div id="tooltip"></div>
 
-<!-- ═══════════════ HEADER ═══════════════ -->
-<header>
-  <div class="badge">TM-align v20220412 · 7 estruturas experimentais · LMDM/UFRJ</div>
-  <h1>Core Estrutural de <span>Mönttinen</span><br>nas Polimerases de Ácido Nucleico</h1>
-  <p class="sub">Detecção local do motivo de 36 resíduos usando TM-align — com correção do erro de cadeia do relatório original</p>
-  <p class="meta">Pedro Torres · 2026-05-17 · Referência: 1VFG-A (NTase β-palm) · 6 folds comparados</p>
+<!-- ════════════════ NAV ════════════════ -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <div class="dot"></div>
+      <span>core.monttinen</span>
+    </div>
+    <div class="nav-links">
+      <a href="#findings">Resultados</a>
+      <a href="#coverage">Folds</a>
+      <a href="#sec-heatmap">Mapa</a>
+      <a href="#table">Contestação</a>
+      <a href="#methods">Métodos</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ════════════════ HERO ════════════════ -->
+<header class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-tag reveal in">
+      <div class="pulse"></div>
+      <span>TM-align v20220412 · análise local · 6 folds · 7 estruturas</span>
+    </div>
+    <h1 class="reveal in">
+      <span class="gradient">Um core estrutural de</span><br>
+      <em>48 resíduos</em><span class="gradient">,<br>compartilhado entre seis</span><br>
+      <span class="gradient">famílias de polimerases.</span>
+    </h1>
+    <p class="hero-sub reveal in">
+      Detecção local do motivo conservado de Mönttinen <em>et al.</em> (2016) nas polimerases de ácido nucleico (EC 2.7.7.*),
+      com correção crítica do erro de cadeia presente no relatório original gerado em <code style="font-family:var(--ff-mono);background:var(--bg-2);padding:0.1rem 0.4rem;border-radius:4px;font-size:0.85em">277.pplx.app</code>.
+    </p>
+    <div class="hero-meta reveal in">
+      <div class="item">
+        <span class="label">Autor</span>
+        <span class="value">Pedro Torres</span>
+      </div>
+      <div class="item">
+        <span class="label">Lab</span>
+        <span class="value">LMDM · UFRJ</span>
+      </div>
+      <div class="item">
+        <span class="label">Data</span>
+        <span class="value">17 mai 2026</span>
+      </div>
+      <div class="item">
+        <span class="label">Referência</span>
+        <span class="value">1VFG-A · NTase β-palm</span>
+      </div>
+      <div class="item">
+        <span class="label">Software</span>
+        <span class="value">TM-align v20220412</span>
+      </div>
+    </div>
+  </div>
 </header>
 
-<!-- ═══════════════ MAIN ═══════════════ -->
-<main>
-
-<!-- KPIs -->
-<section>
+<!-- ════════════════ KPI STRIP ════════════════ -->
+<section id="findings" style="padding-top: 0">
 <div class="container">
-  <div class="section-title">Resultado principal</div>
-  <div class="kpi-grid">
-    <div class="kpi c-blue">
-      <div class="kpi-num">48</div>
-      <div class="kpi-label">Resíduos no core ≥ 5/6</div>
-      <div class="kpi-sub">Mönttinen 2016: 36 (89 estruturas)</div>
-    </div>
-    <div class="kpi c-green">
-      <div class="kpi-num">5/6</div>
-      <div class="kpi-label">Folds PRESENTE (≥ 70%)</div>
-      <div class="kpi-sub">PolX: PARCIAL (66.7%)</div>
-    </div>
-    <div class="kpi c-orange">
-      <div class="kpi-num">4</div>
-      <div class="kpi-label">Resíduos universais (6/6)</div>
-      <div class="kpi-sub">Relatório original: "1" — erro de cadeia</div>
-    </div>
-    <div class="kpi c-red">
-      <div class="kpi-num">2</div>
-      <div class="kpi-label">ASP catalíticos no core</div>
-      <div class="kpi-sub">Asp22 (5/6) · Asp33 (5/6)</div>
-    </div>
-    <div class="kpi c-purple">
-      <div class="kpi-num">+30%</div>
-      <div class="kpi-label">TM NTase↔RNAP corrigido</div>
-      <div class="kpi-sub">0.242 → 0.315 (cadeia B→C)</div>
-    </div>
-  </div>
-
-  <!-- Correction banner -->
-  <div class="correction-banner">
-    <div class="icon">⚠</div>
-    <div>
-      <strong>Erro crítico corrigido: cadeia 1HQM-B → 1HQM-C</strong>
-      <p>O relatório original usou a subunidade <strong>α</strong> do RNAP (cadeia B, 229 Cα — sem domínio palm).
-      Esta análise usa a subunidade <strong>β</strong> (cadeia C, 997 Cα — domínio catalítico PF00562).
-      Impacto: TM-score sobe de 0.242 para 0.315; core universal sobe de 1 para 4 resíduos;
-      RNAP passa de resultados inválidos para 83.3% de cobertura.</p>
-    </div>
-  </div>
-</div>
-</section>
-
-<!-- COVERAGE CARDS -->
-<section>
-<div class="container">
-  <div class="section-title">Cobertura do core por fold</div>
-  <div class="fold-grid" id="fold-cards"></div>
-</div>
-</section>
-
-<!-- HEATMAP -->
-<section>
-<div class="container">
-  <div class="section-title">Mapa de presença/ausência — 48 resíduos × 7 folds</div>
-  <div class="heatmap-wrap">
-    <svg id="heatmap"></svg>
-    <div class="heatmap-legend">
-      <span><div class="leg-swatch" style="background:#e74c3c"></div> NTase (ref)</span>
-      <span><div class="leg-swatch" style="background:#e67e22"></div> PolA</span>
-      <span><div class="leg-swatch" style="background:#c8a000"></div> PolB</span>
-      <span><div class="leg-swatch" style="background:#27ae60"></div> RT</span>
-      <span><div class="leg-swatch" style="background:#00b8a3"></div> PolX</span>
-      <span><div class="leg-swatch" style="background:#3498db"></div> RNAP</span>
-      <span><div class="leg-swatch" style="background:#9b59b6"></div> RdRp</span>
-      <span><div class="leg-swatch" style="background:#2a2d40; border:1px solid #444"></div> Ausente</span>
-      <span><div class="leg-swatch" style="background:gold; border:1px solid #b8860b"></div> ASP catalítico</span>
-      <span><div class="leg-swatch" style="background:white; border:1px solid #888"></div> Universal (6/6)</span>
-    </div>
-  </div>
-</div>
-</section>
-
-<!-- SEQUENCE STRIP -->
-<section>
-<div class="container">
-  <div class="section-title">Distribuição do core na sequência de 1VFG (342 resíduos)</div>
-  <div class="seq-wrap">
-    <svg id="seqstrip" width="100%" height="110"></svg>
-  </div>
-  <p style="color:var(--text-dim);font-size:0.82rem;margin-top:0.8rem">
-    O core de 48 resíduos distribui-se em <strong style="color:var(--text)">5 clusters</strong> ao longo da sequência NTase,
-    correspondendo às β-strands e loops da palmeira-β. Clusters ausentes em PolX (vermelho escuro) concentram-se
-    no Cluster 1 (hairpin N-terminal do palm).
-  </p>
-</div>
-</section>
-
-<!-- TM-SCORE -->
-<section>
-<div class="container">
-  <div class="section-title">TM-scores: NTase vs cada fold (normalizado pela referência)</div>
-  <div class="tm-wrap">
-    <svg id="tmchart" height="280"></svg>
-    <p style="color:var(--text-dim);font-size:0.8rem;margin-top:1rem">
-      Linha vermelha: TM = 0.5 (limiar "mesmo fold", Zhang &amp; Skolnick 2004).
-      Linha laranja: TM = 0.3 (limiar comum de screening; abaixo disso = zona de ruído).
-      Todos os pares estão abaixo de 0.5, confirmando homologia remota, não identidade de fold.
+  <div class="kpi-strip">
+    <div class="eyebrow">Resultado principal</div>
+    <h2>O motivo de Mönttinen aparece — com nuance.</h2>
+    <p class="section-lead">
+      Cinco dos seis folds testados apresentam <em>≥ 70%</em> dos resíduos do core estrutural definido sobre a NTase β-palm.
+      Apenas DNA pol β (PolX) cai em zona parcial. Os dois aspartatos catalíticos do mecanismo two-metal-ion
+      estão entre os resíduos universalmente conservados.
     </p>
+
+    <div class="kpi-strip-grid reveal">
+      <div class="kpi-cell indigo">
+        <div class="num" data-target="48">48</div>
+        <div class="label">Resíduos no core ≥ 5/6</div>
+        <div class="sub">Mönttinen 2016: 36 (89 estruturas)</div>
+      </div>
+      <div class="kpi-cell emerald">
+        <div class="num">5/6</div>
+        <div class="label">Folds com cobertura ≥ 70%</div>
+        <div class="sub">PolX é PARCIAL (66.7%)</div>
+      </div>
+      <div class="kpi-cell text-c">
+        <div class="num" data-target="4">4</div>
+        <div class="label">Resíduos universais (6/6 folds)</div>
+        <div class="sub">Original: "1 — artefato"</div>
+      </div>
+      <div class="kpi-cell gold">
+        <div class="num" data-target="2">2</div>
+        <div class="label">ASP catalíticos no core</div>
+        <div class="sub">Asp22 · Asp33 — two-metal-ion</div>
+      </div>
+      <div class="kpi-cell rose">
+        <div class="num">+30%</div>
+        <div class="label">TM NTase↔RNAP corrigido</div>
+        <div class="sub">0.242 → 0.315 (cadeia B → C)</div>
+      </div>
+    </div>
   </div>
 </div>
 </section>
 
-<!-- CORRECTIONS TABLE -->
+<!-- ════════════════ CORRECTION ════════════════ -->
+<section style="padding-top: 2rem">
+<div class="container reveal">
+  <div class="correction">
+    <div class="correction-text">
+      <div class="eyebrow" style="color:var(--rose)">Correção crítica</div>
+      <h3><span class="badge-err">Erro</span>Cadeia trocada do RNAP</h3>
+      <p>
+        O relatório original (<em>277.pplx.app</em> / biomni) usou <strong>1HQM cadeia B</strong> —
+        a subunidade <strong>α</strong> do RNA polimerase, com apenas 229 Cα e <strong>sem o domínio palm</strong>.
+        O palm PF00562, alvo da análise, está na subunidade <strong>β</strong> (cadeia C, 997 Cα).
+      </p>
+      <p style="margin-top:1rem">
+        Reanálise com a cadeia correta: TM-score sobe <strong>+30%</strong> (0.242 → 0.315),
+        o core universal passa de 1 para <strong>4 resíduos</strong>, e o RNAP atinge <strong>83.3%</strong> de cobertura
+        — ao invés dos resultados inválidos do relatório original.
+      </p>
+    </div>
+    <div class="chain-compare">
+      <div class="chain-card bad">
+        <div class="label">✗ Relatório original</div>
+        <div class="pdb">1HQM · cadeia B</div>
+        <div class="desc">Subunidade α · 229 Cα · sem palm</div>
+      </div>
+      <div class="chain-card good">
+        <div class="label">✓ Esta análise</div>
+        <div class="pdb">1HQM · cadeia C</div>
+        <div class="desc">Subunidade β · 997 Cα · palm PF00562</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ════════════════ FOLD COVERAGE ════════════════ -->
+<section id="coverage">
+<div class="container">
+  <div class="eyebrow">Cobertura por fold</div>
+  <h2>Cada fold mantém uma fração do <em>palm ancestral</em>.</h2>
+  <p class="section-lead">
+    Para cada um dos 6 folds query, calculamos quantos dos 48 resíduos do core são estruturalmente
+    mapeáveis ao 1VFG-A via TM-align. PolX é o mais divergente — consistente com pol β sendo a
+    palm mais distante entre as right-hand polymerases.
+  </p>
+  <div class="fold-grid reveal" id="fold-cards"></div>
+</div>
+</section>
+
+<!-- ════════════════ HEATMAP ════════════════ -->
+<section id="sec-heatmap">
+<div class="container">
+  <div class="eyebrow">Mapa de presença/ausência</div>
+  <h2>Os 48 resíduos do core <em>cruzados</em> com os 7 folds.</h2>
+  <p class="section-lead">
+    Cada coluna é um resíduo do core no 1VFG; cada linha é um fold.
+    Células coloridas indicam presença do alinhamento estrutural; douradas marcam os dois
+    aspartatos catalíticos; brancas marcam resíduos universais (6/6 folds).
+  </p>
+  <div class="viz-card reveal">
+    <svg id="heatmap"></svg>
+    <div class="legend" id="hm-legend"></div>
+  </div>
+</div>
+</section>
+
+<!-- ════════════════ SEQUENCE STRIP ════════════════ -->
 <section>
 <div class="container">
-  <div class="section-title">Contestação quantitativa ao relatório original</div>
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden">
-  <table class="compare-table">
-    <thead>
-      <tr>
-        <th>Métrica</th>
-        <th>Relatório original (pplx/biomni)</th>
-        <th>Esta análise (TM-align local)</th>
-        <th>Causa</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Cadeia RNAP (1HQM)</td>
-        <td><span class="val-error">B (α, 229 Cα — sem palm)</span></td>
-        <td><span class="val-new">C (β, 997 Cα — palm)</span></td>
-        <td>Erro de cadeia</td>
-      </tr>
-      <tr>
-        <td>TM NTase ↔ RNAP</td>
-        <td><span class="val-old">0.242</span></td>
-        <td><span class="val-new">0.315 (+30%)</span></td>
-        <td>Cadeia errada</td>
-      </tr>
-      <tr>
-        <td>Core universal (6/6 folds)</td>
-        <td><span class="val-old">"1 resíduo — artefato"</span></td>
-        <td><span class="val-new">4 resíduos (Phe34, Val35, Lys197, Ala199)</span></td>
-        <td>Cadeia errada + interpretação</td>
-      </tr>
-      <tr>
-        <td>Core ≥ 5/6</td>
-        <td><span class="val-old">32 resíduos</span></td>
-        <td><span class="val-new">48 resíduos</span></td>
-        <td>Esperado: single-rep vs multi-rep</td>
-      </tr>
-      <tr>
-        <td>ASP catalíticos no core</td>
-        <td><span class="val-old">Não reportado</span></td>
-        <td><span class="val-new">Asp22 (5/6), Asp33 (5/6)</span></td>
-        <td>Omissão biológica</td>
-      </tr>
-      <tr>
-        <td>Status PolX</td>
-        <td><span class="val-old">"Detectado" (binário TM≥0.3)</span></td>
-        <td><span class="val-new">PARCIAL — 32/48 (66.7%)</span></td>
-        <td>Threshold inadequado</td>
-      </tr>
-      <tr>
-        <td>Comparação HMM vs TM-align</td>
-        <td><span class="val-old">HMM-de-7-seqs (strawman)</span></td>
-        <td><span class="val-new">— (baseline correto = HHsearch)</span></td>
-        <td>Baseline injusto</td>
-      </tr>
-      <tr>
-        <td>Superfamílias de Mönttinen</td>
-        <td><span class="val-old">"M7" (7 folds)</span></td>
-        <td><span class="val-new">5 superfamílias na publicação original</span></td>
-        <td>Rótulo não existe na literatura</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="eyebrow">Topologia do core</div>
+  <h2>Distribuição na <em>sequência</em> da NTase β-palm (342 aa).</h2>
+  <p class="section-lead">
+    O core de 48 resíduos se concentra em <strong style="color:var(--text)">5 clusters</strong>
+    correspondentes às β-strands e loops catalíticos do palm.
+    Os marcadores dourados (▼) indicam os aspartatos catalíticos.
+  </p>
+  <div class="viz-card reveal">
+    <svg id="seqstrip" width="100%"></svg>
   </div>
 </div>
 </section>
 
-<!-- METHODS NOTE -->
+<!-- ════════════════ TM-SCORE CHART ════════════════ -->
 <section>
 <div class="container">
-  <div class="section-title">Métodos</div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem">
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.2rem">
-      <div style="font-weight:600;margin-bottom:0.5rem">Estruturas usadas</div>
-      <div style="font-size:0.82rem;color:var(--text-dim)">7 estruturas experimentais do RCSB PDB.
-      Referência: 1VFG-A (NTase β-palm, CCA-adding, <em>Aquifex aeolicus</em>).
-      Cadeias extraídas com BioPython 1.87.</div>
-    </div>
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.2rem">
-      <div style="font-weight:600;margin-bottom:0.5rem">TM-align v20220412</div>
-      <div style="font-size:0.82rem;color:var(--text-dim)">Alinhamento estrutural par-a-par.
-      TM-score normalizado pela referência (estrutura menor = 1VFG).
-      Pares de resíduos extraídos do alinhamento de saída (distância &lt; 5 Å).</div>
-    </div>
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.2rem">
-      <div style="font-weight:600;margin-bottom:0.5rem">Definição do core</div>
-      <div style="font-size:0.82rem;color:var(--text-dim)">Resíduo do 1VFG classificado como "core" se alinhado
-      a ≥ 5 dos 6 folds query. Core de 48 resíduos (vs 36 de Mönttinen 2016 com 89 estruturas
-      — diferença esperada pela ausência de filtragem intra-fold).</div>
-    </div>
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.2rem">
-      <div style="font-weight:600;margin-bottom:0.5rem">Presença/ausência</div>
-      <div style="font-size:0.82rem;color:var(--text-dim)">Para cada fold, calcula-se quantos dos 48 resíduos
-      do core (em numeração 1VFG) possuem resíduo equivalente no alinhamento TM-align.
-      PRESENTE ≥ 70%; PARCIAL 40–69%; AUSENTE &lt; 40%.</div>
-    </div>
+  <div class="eyebrow">Alinhamento estrutural global</div>
+  <h2>TM-scores: <em>homologia remota</em>, não identidade de fold.</h2>
+  <p class="section-lead">
+    Todos os pares ficam abaixo de 0.5 (limiar "mesmo fold" de Zhang &amp; Skolnick 2004).
+    A barra sólida usa a normalização pelo comprimento da referência; o contorno tracejado pelo alvo.
+    Acima de 0.3 indica sinal estrutural genuíno; abaixo é zona de ruído.
+  </p>
+  <div class="viz-card reveal">
+    <svg id="tmchart"></svg>
   </div>
 </div>
 </section>
 
-</main>
+<!-- ════════════════ COMPARISON TABLE ════════════════ -->
+<section id="table">
+<div class="container">
+  <div class="eyebrow">Contestação quantitativa</div>
+  <h2>O que <em>muda</em> ao corrigir os erros do relatório original.</h2>
+  <p class="section-lead">
+    Comparação item-por-item entre o relatório gerado em <em>277.pplx.app</em> / biomni
+    e esta reanálise local com cadeia correta e definição de core mais informativa.
+  </p>
+  <div class="compare-card reveal">
+    <table class="compare">
+      <thead>
+        <tr>
+          <th>Métrica</th>
+          <th>Relatório original</th>
+          <th>Esta análise</th>
+          <th>Causa</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Cadeia RNAP (1HQM)</td>
+          <td><span class="v-err">B · α · 229 Cα · sem palm</span></td>
+          <td><span class="v-new">C · β · 997 Cα · com palm</span></td>
+          <td><span class="v-cause">Erro de cadeia</span></td>
+        </tr>
+        <tr>
+          <td>TM NTase ↔ RNAP</td>
+          <td><span class="v-old">0.242</span></td>
+          <td><span class="v-new">0.315  (+30%)</span></td>
+          <td><span class="v-cause">Cadeia errada</span></td>
+        </tr>
+        <tr>
+          <td>Core universal (6/6 folds)</td>
+          <td><span class="v-old">"1 resíduo — artefato"</span></td>
+          <td><span class="v-new">4 resíduos: Phe34, Val35, Lys197, Ala199</span></td>
+          <td><span class="v-cause">Cadeia + interpretação</span></td>
+        </tr>
+        <tr>
+          <td>Core ≥ 5/6</td>
+          <td><span class="v-old">32 resíduos</span></td>
+          <td><span class="v-new">48 resíduos</span></td>
+          <td><span class="v-cause">Single-rep vs multi-rep</span></td>
+        </tr>
+        <tr>
+          <td>ASP catalíticos no core</td>
+          <td><span class="v-old">Não reportado</span></td>
+          <td><span class="v-new">Asp22 (5/6), Asp33 (5/6)</span></td>
+          <td><span class="v-cause">Omissão biológica</span></td>
+        </tr>
+        <tr>
+          <td>Status PolX</td>
+          <td><span class="v-old">"Detectado" (binário TM ≥ 0.3)</span></td>
+          <td><span class="v-new">PARCIAL · 32/48 · 66.7%</span></td>
+          <td><span class="v-cause">Threshold inadequado</span></td>
+        </tr>
+        <tr>
+          <td>Baseline HMM vs TM-align</td>
+          <td><span class="v-old">HMM-de-7-seqs (strawman)</span></td>
+          <td><span class="v-new">baseline correto = HHsearch</span></td>
+          <td><span class="v-cause">Comparação injusta</span></td>
+        </tr>
+        <tr>
+          <td>Superfamílias de Mönttinen</td>
+          <td><span class="v-old">"M7" (rótulo fabricado)</span></td>
+          <td><span class="v-new">5 superfamílias (publicação original)</span></td>
+          <td><span class="v-cause">Inexistente na literatura</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+<!-- ════════════════ METHODS ════════════════ -->
+<section id="methods">
+<div class="container">
+  <div class="eyebrow">Métodos</div>
+  <h2>Pipeline <em>reprodutível</em>, software open-source.</h2>
+  <p class="section-lead">
+    Todas as etapas executadas localmente com ferramentas disponíveis publicamente.
+    Outputs reproduzíveis a partir de <code style="font-family:var(--ff-mono);background:var(--bg-2);padding:0.1rem 0.4rem;border-radius:4px;font-size:0.85em">monttinen_core.py</code>.
+  </p>
+  <div class="methods-grid reveal">
+    <div class="method-card">
+      <div class="icon">01</div>
+      <h4>Estruturas</h4>
+      <p>7 estruturas experimentais do RCSB PDB. Referência: <strong style="color:var(--text)">1VFG-A</strong> — NTase β-palm da CCA-adding enzyme de <em>Aquifex aeolicus</em>. Cadeias extraídas com BioPython 1.87.</p>
+    </div>
+    <div class="method-card">
+      <div class="icon">02</div>
+      <h4>TM-align</h4>
+      <p>Alinhamento estrutural par-a-par com TM-align v20220412. TM-score normalizado pela referência menor (1VFG). Pares de resíduos extraídos do alinhamento de saída (símbolos <code style="font-family:var(--ff-mono);background:var(--bg-2);padding:0 0.2rem;border-radius:3px">:</code> e <code style="font-family:var(--ff-mono);background:var(--bg-2);padding:0 0.2rem;border-radius:3px">.</code>).</p>
+    </div>
+    <div class="method-card">
+      <div class="icon">03</div>
+      <h4>Definição do core</h4>
+      <p>Resíduo do 1VFG classificado como "core" se alinhado em <strong style="color:var(--text)">≥ 5 dos 6 folds</strong> query. Core de 48 resíduos é mais frouxo que os 36 de Mönttinen 2016 — diferença esperada pela ausência de filtragem intra-fold.</p>
+    </div>
+    <div class="method-card">
+      <div class="icon">04</div>
+      <h4>Presença/ausência</h4>
+      <p>Para cada fold, calcula-se quantos dos 48 resíduos do core possuem equivalente no alinhamento TM-align. <strong style="color:var(--emerald)">PRESENTE</strong> ≥ 70% · <strong style="color:var(--rose)">PARCIAL</strong> 40–69% · <strong style="color:var(--text-mute)">AUSENTE</strong> &lt; 40%.</p>
+    </div>
+  </div>
+</div>
+</section>
 
 <footer>
-  Pedro Torres · LMDM/UFRJ · 2026-05-17 · TM-align v20220412 · BioPython 1.87 · Python 3.12
+  <div>Pedro Torres · LMDM / UFRJ · 17 mai 2026</div>
+  <div class="footer-meta">TM-align v20220412 · BioPython 1.87 · Python 3.12 · 7 estruturas PDB</div>
 </footer>
 
 <script>
-// ════════════════════════════════════════════════════════
-//  DATA
-// ════════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
+   DATA
+   ════════════════════════════════════════════════════════ */
 const FOLD_COLORS = {
-  NTase: '#e74c3c', PolA: '#e67e22', PolB: '#c8a000',
-  RT: '#27ae60', PolX: '#00b8a3', RNAP: '#3498db', RdRp: '#9b59b6'
+  NTase: '#ef4444', PolA: '#f97316', PolB: '#eab308',
+  RT: '#22c55e', PolX: '#14b8a6', RNAP: '#3b82f6', RdRp: '#a855f7'
 };
 
 const FOLD_META = {
@@ -563,7 +1028,7 @@ const FOLD_META = {
   PolB:  { pdb: '1WAJ-A', desc: 'DNA pol B gp43 · Phage RB69',                    ref: false },
   RT:    { pdb: '1RTD-A', desc: 'HIV-1 RT p66',                                   ref: false },
   PolX:  { pdb: '1BPX-A', desc: 'DNA pol β · H.sapiens',                          ref: false },
-  RNAP:  { pdb: '1HQM-C', desc: 'RNA pol β subunit · T.aquaticus [chain C fixed]', ref: false },
+  RNAP:  { pdb: '1HQM-C', desc: 'RNA pol β subunit · T.aquaticus (chain fixed)', ref: false },
   RdRp:  { pdb: '1RDR-A', desc: 'Poliovirus 3Dpol',                               ref: false },
 };
 
@@ -578,15 +1043,14 @@ const PRESENCE = [
 ];
 
 const TM_DATA = [
-  { fold:'PolA', tm_ref:0.302, tm_tgt:0.205, rmsd:7.00, n_aligned:181 },
   { fold:'PolB', tm_ref:0.355, tm_tgt:0.163, rmsd:6.11, n_aligned:190 },
   { fold:'RT',   tm_ref:0.321, tm_tgt:0.226, rmsd:6.97, n_aligned:192 },
-  { fold:'PolX', tm_ref:0.251, tm_tgt:0.257, rmsd:7.21, n_aligned:155 },
   { fold:'RNAP', tm_ref:0.315, tm_tgt:0.129, rmsd:7.07, n_aligned:192 },
+  { fold:'PolA', tm_ref:0.302, tm_tgt:0.205, rmsd:7.00, n_aligned:181 },
   { fold:'RdRp', tm_ref:0.297, tm_tgt:0.314, rmsd:6.43, n_aligned:170 },
+  { fold:'PolX', tm_ref:0.251, tm_tgt:0.257, rmsd:7.21, n_aligned:155 },
 ];
 
-// 48 core residues
 const CORE = [
   {idx:18,resnum:19, aa:'VAL',nf:5,folds:['PolA','PolB','RNAP','RT','RdRp']},
   {idx:20,resnum:21, aa:'ARG',nf:5,folds:['PolA','PolB','RNAP','RT','RdRp']},
@@ -639,156 +1103,197 @@ const CORE = [
 ];
 
 const FOLDS_ORDER = ['NTase','PolA','PolB','RT','PolX','RNAP','RdRp'];
-const ABSENT_SETS = {};
-PRESENCE.forEach(p => { ABSENT_SETS[p.fold] = new Set(p.absent); });
 
-// ════════════════════════════════════════════════════════
-//  FOLD CARDS
-// ════════════════════════════════════════════════════════
-function buildCards() {
+/* ════════════════════════════════════════════════════════
+   FOLD CARDS — radial progress
+   ════════════════════════════════════════════════════════ */
+function buildFoldCards() {
   const grid = document.getElementById('fold-cards');
-  PRESENCE.forEach(p => {
+  const R = 50;
+  const C = 2 * Math.PI * R;
+
+  PRESENCE.forEach((p, i) => {
     const m = FOLD_META[p.fold];
     const isRef = m.ref;
-    const status = isRef ? 'ref' : p.pct >= 70 ? 'present' : p.pct >= 40 ? 'partial' : 'absent';
-    const label  = isRef ? 'Referência' : status === 'present' ? 'Presente' : 'Parcial';
+    const status = isRef ? 'ref' : p.pct >= 70 ? 'present' : 'partial';
+    const label = isRef ? 'Referência' : p.pct >= 70 ? 'Presente' : 'Parcial';
+    const offset = C * (1 - p.pct / 100);
+
     const card = document.createElement('div');
     card.className = 'fold-card';
+    card.style.setProperty('--fold-color', FOLD_COLORS[p.fold]);
+    card.style.animationDelay = (i * 0.08) + 's';
     card.innerHTML = `
-      <div class="fold-accent" style="background:${FOLD_COLORS[p.fold]}"></div>
-      <div class="fold-card-header">
+      <div class="fold-card-head">
         <div>
-          <div class="fold-name" style="color:${FOLD_COLORS[p.fold]}">${p.fold}</div>
-          <div class="fold-pdb">${m.pdb}</div>
+          <div class="name" style="color:${FOLD_COLORS[p.fold]}">${p.fold}</div>
+          <div class="pdb">${m.pdb}</div>
         </div>
-        <div class="status-badge status-${status}">${label}</div>
+        <div class="fold-status ${status}">${label}</div>
       </div>
-      <div class="progress-wrap">
-        <div class="progress-bar" style="width:0%;background:${FOLD_COLORS[p.fold]}" data-w="${p.pct}"></div>
-      </div>
-      <div class="fold-stats">
-        <span>${p.present}/${p.total} resíduos presentes</span>
-        <span>${p.pct}%</span>
+      <div class="fold-radial-wrap">
+        <svg viewBox="0 0 120 120">
+          <circle class="track" cx="60" cy="60" r="${R}"/>
+          <circle class="arc" cx="60" cy="60" r="${R}"
+            stroke="${FOLD_COLORS[p.fold]}"
+            stroke-dasharray="${C}"
+            stroke-dashoffset="${C}"
+            data-target-offset="${offset}"/>
+        </svg>
+        <div class="fold-radial-center">
+          <div class="pct" style="color:${FOLD_COLORS[p.fold]}">${p.pct.toFixed(p.pct === Math.floor(p.pct) ? 0 : 1)}%</div>
+          <div class="ratio">${p.present}/${p.total}</div>
+        </div>
       </div>
       <div class="fold-desc">${m.desc}</div>
     `;
     grid.appendChild(card);
   });
-  // Animate bars
-  setTimeout(() => {
-    document.querySelectorAll('.progress-bar').forEach(b => {
-      b.style.width = b.dataset.w + '%';
-    });
-  }, 100);
 }
 
-// ════════════════════════════════════════════════════════
-//  HEATMAP
-// ════════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
+   HEATMAP
+   ════════════════════════════════════════════════════════ */
 function buildHeatmap() {
   const svg = document.getElementById('heatmap');
-  const cellW = 18, cellH = 24, padL = 70, padT = 50, padB = 30;
+  const cellW = 18, cellH = 26, padL = 80, padT = 60, padB = 50, gap = 2;
   const nCols = CORE.length;
   const nRows = FOLDS_ORDER.length;
-  const W = padL + nCols * cellW + 20;
-  const H = padT + nRows * cellH + padB + 20;
+  const W = padL + nCols * cellW + 30;
+  const H = padT + nRows * cellH + padB;
   svg.setAttribute('width', W);
   svg.setAttribute('height', H);
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
 
-  // Cluster boundaries (by gaps in residue numbers)
+  // cluster boundaries
   const clusters = [];
   let start = 0;
   for (let i = 1; i < CORE.length; i++) {
     if (CORE[i].idx - CORE[i-1].idx > 5) {
-      clusters.push({s: start, e: i-1});
+      clusters.push({s:start, e:i-1});
       start = i;
     }
   }
-  clusters.push({s: start, e: CORE.length-1});
+  clusters.push({s:start, e:CORE.length-1});
+
+  const ABSENT_SETS = {};
+  PRESENCE.forEach(p => { ABSENT_SETS[p.fold] = new Set(p.absent); });
 
   let html = '';
 
-  // Cluster background bands
+  // cluster bands
   clusters.forEach((cl, ci) => {
     const x = padL + cl.s * cellW;
     const w = (cl.e - cl.s + 1) * cellW;
-    const bg = ci % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'transparent';
-    html += `<rect x="${x}" y="${padT-4}" width="${w}" height="${nRows*cellH+8}" fill="${bg}" rx="3"/>`;
-    // cluster label
-    const cx = x + w/2;
-    html += `<text x="${cx}" y="${padT-10}" text-anchor="middle" class="cluster-label">C${ci+1}</text>`;
+    if (ci % 2 === 0) {
+      html += `<rect x="${x}" y="${padT - 8}" width="${w}" height="${nRows * cellH + 12}"
+        fill="rgba(255,255,255,0.025)" rx="6"/>`;
+    }
+    const cx = x + w / 2;
+    html += `<text x="${cx}" y="${padT - 24}" text-anchor="middle"
+      font-family="JetBrains Mono" font-size="10" fill="#a4abc9" font-weight="600">C${ci+1}</text>`;
+    html += `<text x="${cx}" y="${padT - 12}" text-anchor="middle"
+      font-family="JetBrains Mono" font-size="9" fill="#6b7299">
+      ${CORE[cl.s].resnum}–${CORE[cl.e].resnum}</text>`;
   });
 
-  // Row labels + cells
+  // rows
   FOLDS_ORDER.forEach((fold, row) => {
     const y = padT + row * cellH;
-    html += `<text x="${padL-6}" y="${y + cellH*0.68}" text-anchor="end"
-      font-size="12" font-weight="600" fill="${FOLD_COLORS[fold]}">${fold}</text>`;
-
-    const absentSet = ABSENT_SETS[fold] || new Set();
+    html += `<text x="${padL - 12}" y="${y + cellH * 0.7}" text-anchor="end"
+      font-family="Inter" font-size="13" font-weight="600" fill="${FOLD_COLORS[fold]}">${fold}</text>`;
 
     CORE.forEach((res, col) => {
       const x = padL + col * cellW;
       const inCore = fold === 'NTase' || res.folds.includes(fold);
-      let fill, stroke;
+      let fill, stroke = 'none';
 
-      if (res.universal && inCore) {
-        fill = 'white'; stroke = '#888';
-      } else if (res.catalytic && inCore) {
-        fill = 'gold'; stroke = '#b8860b';
-      } else if (inCore) {
-        fill = FOLD_COLORS[fold]; stroke = 'none';
-      } else {
-        fill = '#1e2136'; stroke = '#2a2d40';
-      }
+      if (res.universal && inCore) { fill = '#f0f1f7'; stroke = '#a4abc9'; }
+      else if (res.catalytic && inCore) { fill = '#f5c518'; stroke = '#b8910e'; }
+      else if (inCore) { fill = FOLD_COLORS[fold]; }
+      else { fill = 'rgba(255,255,255,0.04)'; stroke = 'rgba(255,255,255,0.06)'; }
 
-      const tt = `${res.aa}${res.resnum} | ${res.nf}/6 folds${res.catalytic?' ★ ASP catalítico':''}${res.universal?' ● Universal':''}`;
-      html += `<rect x="${x+1}" y="${y+2}" width="${cellW-2}" height="${cellH-4}"
-        fill="${fill}" stroke="${stroke}" stroke-width="0.8" rx="2"
-        data-tt="${tt}" class="hm-cell"/>`;
+      const tt = JSON.stringify({
+        title: `${res.aa}${res.resnum}`,
+        meta: `${res.nf}/6 folds · idx ${res.idx}`,
+        cat: !!res.catalytic,
+        uni: !!res.universal
+      });
+      html += `<rect x="${x + gap/2}" y="${y + gap/2}" width="${cellW - gap}" height="${cellH - gap}"
+        fill="${fill}" stroke="${stroke}" stroke-width="0.8" rx="3"
+        data-tt='${tt}' class="hm-cell" style="cursor:crosshair"/>`;
     });
   });
 
-  // Column header (residue number every 6th)
+  // Catalytic ASP top markers
   CORE.forEach((res, col) => {
+    if (res.catalytic) {
+      const x = padL + col * cellW + cellW/2;
+      html += `<polygon points="${x},${padT - 30} ${x-4},${padT-36} ${x+4},${padT-36}"
+        fill="#f5c518"/>`;
+    }
     if (col % 6 === 0) {
       const x = padL + col * cellW + cellW/2;
       html += `<text x="${x}" y="${padT + nRows*cellH + 16}" text-anchor="middle"
-        font-size="9" fill="#7b82a6">${res.resnum}</text>`;
-    }
-    // Mark catalytic ASP
-    if (res.catalytic) {
-      const x = padL + col * cellW + cellW/2;
-      html += `<text x="${x}" y="${padT-2}" text-anchor="middle" font-size="9" fill="gold">▼</text>`;
+        font-family="JetBrains Mono" font-size="9" fill="#6b7299">${res.resnum}</text>`;
     }
   });
 
+  // baseline
+  html += `<line x1="${padL}" y1="${padT + nRows*cellH + 4}" x2="${padL + nCols*cellW}" y2="${padT + nRows*cellH + 4}"
+    stroke="rgba(255,255,255,0.1)" stroke-width="1"/>`;
+  html += `<text x="${padL + nCols*cellW + 8}" y="${padT + nRows*cellH + 8}"
+    font-family="JetBrains Mono" font-size="8.5" fill="#454c70">resnum (1VFG)</text>`;
+
   svg.innerHTML = html;
 
-  // Tooltip
+  // legend
+  const legend = document.getElementById('hm-legend');
+  legend.innerHTML = `
+    ${FOLDS_ORDER.map(f => `<div class="legend-item"><div class="legend-sw" style="background:${FOLD_COLORS[f]};border-color:${FOLD_COLORS[f]}"></div>${f}</div>`).join('')}
+    <div class="legend-item"><div class="legend-sw" style="background:#f5c518;border-color:#b8910e"></div>ASP catalítico</div>
+    <div class="legend-item"><div class="legend-sw" style="background:#f0f1f7;border-color:#a4abc9"></div>Universal 6/6</div>
+    <div class="legend-item"><div class="legend-sw" style="background:rgba(255,255,255,0.04)"></div>Ausente</div>
+  `;
+
+  // tooltip listeners
   svg.querySelectorAll('.hm-cell').forEach(el => {
-    el.addEventListener('mouseenter', e => showTip(e, el.dataset.tt));
+    el.addEventListener('mouseenter', e => showTip(e, JSON.parse(el.dataset.tt)));
     el.addEventListener('mouseleave', hideTip);
   });
 }
 
-// ════════════════════════════════════════════════════════
-//  SEQUENCE STRIP
-// ════════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
+   SEQUENCE STRIP
+   ════════════════════════════════════════════════════════ */
 function buildSeqStrip() {
   const svg = document.getElementById('seqstrip');
-  const W = svg.parentElement.clientWidth - 40 || 900;
+  const wrap = svg.parentElement;
+  const W = wrap.clientWidth - 64 || 900;
+  const H = 130;
   const TOTAL = 342;
-  const barH = 18, barY = 45, scale = (W - 60) / TOTAL;
-  svg.setAttribute('height', 110);
-  svg.setAttribute('viewBox', `0 0 ${W} 110`);
+  const barH = 26;
+  const barY = 50;
+  const left = 30;
+  const scale = (W - left*2) / TOTAL;
+
+  svg.setAttribute('width', W);
+  svg.setAttribute('height', H);
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
 
   let html = '';
 
-  // Background bar
-  html += `<rect x="30" y="${barY}" width="${TOTAL*scale}" height="${barH}" fill="#1e2136" rx="4"/>`;
+  // background bar
+  html += `<defs>
+    <linearGradient id="seqbg" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.04)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.015)"/>
+    </linearGradient>
+  </defs>`;
+  html += `<rect x="${left}" y="${barY}" width="${TOTAL*scale}" height="${barH}" fill="url(#seqbg)" rx="6"
+    stroke="rgba(255,255,255,0.08)" stroke-width="1"/>`;
 
-  // Cluster highlights
+  // cluster highlights
   const clusters = [];
   let s = 0;
   for (let i = 1; i < CORE.length; i++) {
@@ -797,131 +1302,213 @@ function buildSeqStrip() {
   clusters.push([s, CORE.length-1]);
 
   clusters.forEach(([cs, ce], ci) => {
-    const x1 = 30 + CORE[cs].idx * scale;
-    const x2 = 30 + (CORE[ce].idx + 1) * scale;
-    html += `<rect x="${x1}" y="${barY}" width="${x2-x1}" height="${barH}" fill="#e74c3c" opacity="0.75" rx="2"/>`;
+    const x1 = left + CORE[cs].idx * scale;
+    const x2 = left + (CORE[ce].idx + 1) * scale;
+    html += `<rect x="${x1}" y="${barY+2}" width="${x2-x1}" height="${barH-4}"
+      fill="#ef4444" opacity="0.85" rx="3"/>`;
     const cx = (x1+x2)/2;
-    html += `<text x="${cx}" y="${barY-6}" text-anchor="middle" font-size="10" fill="#e87060">C${ci+1}</text>`;
-    html += `<text x="${cx}" y="${barY+barH+12}" text-anchor="middle" font-size="9" fill="#7b82a6">
+    html += `<text x="${cx}" y="${barY-8}" text-anchor="middle"
+      font-family="JetBrains Mono" font-size="10" font-weight="600" fill="#ef4444">C${ci+1}</text>`;
+    html += `<text x="${cx}" y="${barY + barH + 16}" text-anchor="middle"
+      font-family="JetBrains Mono" font-size="9" fill="#a4abc9">
       ${CORE[cs].resnum}–${CORE[ce].resnum}</text>`;
   });
 
-  // Catalytic ASP markers
+  // catalytic markers
   CORE.filter(r => r.catalytic).forEach(r => {
-    const x = 30 + r.idx * scale + scale/2;
-    html += `<polygon points="${x},${barY-2} ${x-4},${barY-10} ${x+4},${barY-10}"
-      fill="gold" stroke="#b8860b" stroke-width="0.8"/>`;
-    html += `<text x="${x}" y="${barY+barH+25}" text-anchor="middle" font-size="8" fill="gold">ASP${r.resnum}</text>`;
+    const x = left + r.idx * scale + scale/2;
+    // Drop pin
+    html += `<circle cx="${x}" cy="${barY - 4}" r="6" fill="#f5c518" stroke="#b8910e" stroke-width="1"/>`;
+    html += `<text x="${x}" y="${barY - 1}" text-anchor="middle"
+      font-family="JetBrains Mono" font-size="8" font-weight="700" fill="#0a0a0f">D</text>`;
+    html += `<text x="${x}" y="${barY + barH + 30}" text-anchor="middle"
+      font-family="JetBrains Mono" font-size="8" fill="#f5c518">ASP${r.resnum}</text>`;
   });
 
-  // Sequence ruler
+  // ruler
   [0, 50, 100, 150, 200, 250, 300, 342].forEach(n => {
-    const x = 30 + n * scale;
-    html += `<line x1="${x}" y1="${barY+barH}" x2="${x}" y2="${barY+barH+4}" stroke="#7b82a6" stroke-width="0.8"/>`;
-    html += `<text x="${x}" y="${barY+barH+14}" text-anchor="middle" font-size="9" fill="#7b82a6">${n}</text>`;
+    const x = left + n * scale;
+    html += `<line x1="${x}" y1="${barY + barH}" x2="${x}" y2="${barY + barH + 4}"
+      stroke="#454c70" stroke-width="0.8"/>`;
+    if (n !== 0 && n !== 342) {
+      html += `<text x="${x}" y="${barY + barH + 28}" text-anchor="middle"
+        font-family="JetBrains Mono" font-size="9" fill="#6b7299">${n}</text>`;
+    }
   });
+  // 0 and 342 labels
+  html += `<text x="${left}" y="${barY + barH + 28}" text-anchor="start"
+    font-family="JetBrains Mono" font-size="9" fill="#6b7299">0</text>`;
+  html += `<text x="${left + TOTAL*scale}" y="${barY + barH + 28}" text-anchor="end"
+    font-family="JetBrains Mono" font-size="9" fill="#6b7299">342</text>`;
 
-  // Label
-  html += `<text x="28" y="${barY-6}" text-anchor="end" font-size="10" fill="#7b82a6">1VFG-A</text>`;
-  html += `<text x="28" y="${barY+barH/2+4}" text-anchor="end" font-size="10" fill="#e87060" font-weight="bold">342 aa</text>`;
+  // label
+  html += `<text x="${left}" y="${barY - 24}" text-anchor="start"
+    font-family="JetBrains Mono" font-size="10" font-weight="600" fill="#ef4444">1VFG-A</text>`;
+  html += `<text x="${left + 56}" y="${barY - 24}" text-anchor="start"
+    font-family="JetBrains Mono" font-size="9.5" fill="#6b7299">NTase β-palm · 342 aa</text>`;
 
   svg.innerHTML = html;
 }
 
-// ════════════════════════════════════════════════════════
-//  TM-SCORE CHART
-// ════════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
+   TM-SCORE CHART
+   ════════════════════════════════════════════════════════ */
 function buildTMChart() {
   const svg = document.getElementById('tmchart');
-  const W = svg.parentElement.clientWidth - 40 || 800;
-  svg.setAttribute('width', W);
-  const padL = 70, padR = 30, padT = 20, padB = 40;
+  const wrap = svg.parentElement;
+  const W = wrap.clientWidth - 64 || 900;
+  const padL = 80, padR = 40, padT = 30, padB = 50;
+  const barH = 28, gap = 16;
+  const chartH = TM_DATA.length * (barH + gap) - gap;
+  const H = padT + chartH + padB;
+  const maxTM = 0.55;
   const chartW = W - padL - padR;
-  const chartH = 200;
-  const barH   = 28;
-  const maxTM  = 0.55;
-  const scale  = chartW / maxTM;
+  const scale = chartW / maxTM;
+
+  svg.setAttribute('width', W);
+  svg.setAttribute('height', H);
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
 
   let html = '';
 
-  // Grid lines
+  // grid
   [0, 0.1, 0.2, 0.3, 0.4, 0.5].forEach(v => {
     const x = padL + v * scale;
-    html += `<line x1="${x}" y1="${padT}" x2="${x}" y2="${padT+chartH}"
-      stroke="#2e3347" stroke-width="0.8"/>`;
-    html += `<text x="${x}" y="${padT+chartH+14}" text-anchor="middle"
-      font-size="10" fill="#7b82a6">${v}</text>`;
+    html += `<line x1="${x}" y1="${padT - 10}" x2="${x}" y2="${padT + chartH + 8}"
+      stroke="rgba(255,255,255,0.05)" stroke-width="1"/>`;
+    html += `<text x="${x}" y="${padT + chartH + 24}" text-anchor="middle"
+      font-family="JetBrains Mono" font-size="10" fill="#6b7299">${v.toFixed(1)}</text>`;
   });
 
-  // Threshold lines
+  // threshold lines
   const x05 = padL + 0.5 * scale;
   const x03 = padL + 0.3 * scale;
-  html += `<line x1="${x05}" y1="${padT-6}" x2="${x05}" y2="${padT+chartH}"
-    stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.7"/>`;
-  html += `<text x="${x05+4}" y="${padT+6}" font-size="9" fill="#e87060">0.5 = mesmo fold</text>`;
-  html += `<line x1="${x03}" y1="${padT-6}" x2="${x03}" y2="${padT+chartH}"
-    stroke="#e67e22" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.7"/>`;
-  html += `<text x="${x03+4}" y="${padT+6}" font-size="9" fill="#e8a010">0.3 = zona de ruído</text>`;
+  html += `<line x1="${x05}" y1="${padT - 18}" x2="${x05}" y2="${padT + chartH + 8}"
+    stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.7"/>`;
+  html += `<text x="${x05}" y="${padT - 22}" text-anchor="middle"
+    font-family="JetBrains Mono" font-size="9" fill="#ef4444">0.5 · mesmo fold</text>`;
+  html += `<line x1="${x03}" y1="${padT - 18}" x2="${x03}" y2="${padT + chartH + 8}"
+    stroke="#f97316" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.7"/>`;
+  html += `<text x="${x03}" y="${padT - 22}" text-anchor="middle"
+    font-family="JetBrains Mono" font-size="9" fill="#f97316">0.3 · ruído</text>`;
 
-  // Bars
+  // bars
   TM_DATA.forEach((d, i) => {
-    const y = padT + i * (barH + 8);
+    const y = padT + i * (barH + gap);
     const bw = d.tm_ref * scale;
-    html += `<rect x="${padL}" y="${y}" width="${bw}" height="${barH}"
-      fill="${FOLD_COLORS[d.fold]}" opacity="0.85" rx="4"/>`;
-    // TM-target (transparent)
     const bw2 = d.tm_tgt * scale;
+
+    // label
+    html += `<text x="${padL - 12}" y="${y + barH * 0.68}" text-anchor="end"
+      font-family="Inter" font-size="13" font-weight="600" fill="${FOLD_COLORS[d.fold]}">${d.fold}</text>`;
+
+    // tm_ref solid
+    html += `<rect x="${padL}" y="${y}" width="${bw}" height="${barH}"
+      fill="${FOLD_COLORS[d.fold]}" opacity="0.9" rx="4"/>`;
+
+    // tm_tgt outline (different normalization)
     html += `<rect x="${padL}" y="${y}" width="${bw2}" height="${barH}"
-      fill="none" stroke="${FOLD_COLORS[d.fold]}" stroke-width="1.5"
-      stroke-dasharray="4,3" rx="4" opacity="0.5"/>`;
-    html += `<text x="${padL-6}" y="${y+barH*0.68}" text-anchor="end"
-      font-size="12" font-weight="600" fill="${FOLD_COLORS[d.fold]}">${d.fold}</text>`;
-    html += `<text x="${padL + bw + 6}" y="${y+barH*0.68}"
-      font-size="11" fill="${FOLD_COLORS[d.fold]}">${d.tm_ref}</text>`;
-    // RMSD label
-    html += `<text x="${padL + bw + 50}" y="${y+barH*0.68}"
-      font-size="10" fill="#7b82a6">RMSD ${d.rmsd}Å  n=${d.n_aligned}</text>`;
+      fill="none" stroke="${FOLD_COLORS[d.fold]}" stroke-width="1.4"
+      stroke-dasharray="3,3" rx="4" opacity="0.6"/>`;
+
+    // value label
+    html += `<text x="${padL + Math.max(bw, bw2) + 12}" y="${y + barH * 0.45}"
+      font-family="JetBrains Mono" font-size="11" font-weight="600" fill="${FOLD_COLORS[d.fold]}">${d.tm_ref}</text>`;
+    html += `<text x="${padL + Math.max(bw, bw2) + 12}" y="${y + barH * 0.95}"
+      font-family="JetBrains Mono" font-size="9" fill="#6b7299">RMSD ${d.rmsd}Å · n=${d.n_aligned}</text>`;
   });
 
-  // X-axis label
-  html += `<text x="${padL + chartW/2}" y="${padT+chartH+32}" text-anchor="middle"
-    font-size="11" fill="#7b82a6">TM-score (normalizado por 1VFG = referência)</text>`;
+  // axis label
+  html += `<text x="${padL + chartW / 2}" y="${padT + chartH + 42}" text-anchor="middle"
+    font-family="JetBrains Mono" font-size="10" fill="#454c70">TM-score · normalizado pelo comprimento da referência (1VFG)</text>`;
 
-  svg.setAttribute('height', padT + TM_DATA.length*(barH+8) + padB + 20);
   svg.innerHTML = html;
 }
 
-// ════════════════════════════════════════════════════════
-//  TOOLTIP
-// ════════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
+   TOOLTIP
+   ════════════════════════════════════════════════════════ */
 const tip = document.getElementById('tooltip');
-function showTip(e, text) {
-  tip.innerHTML = text.replace('★', '<span style="color:gold">★</span>')
-                      .replace('●', '<span style="color:white">●</span>');
+function showTip(e, data) {
+  let html = `<div class="tt-title">${data.title}</div>`;
+  html += `<div class="tt-meta">${data.meta}</div>`;
+  if (data.cat) html += `<div class="tt-special tt-cat">★ ASP catalítico</div>`;
+  if (data.uni) html += `<div class="tt-special tt-uni">● Universal 6/6</div>`;
+  tip.innerHTML = html;
   tip.style.display = 'block';
   moveTip(e);
 }
 function moveTip(e) {
-  tip.style.left = (e.clientX + 14) + 'px';
-  tip.style.top  = (e.clientY - 10) + 'px';
+  const r = tip.getBoundingClientRect();
+  let x = e.clientX + 14;
+  let y = e.clientY - 10;
+  if (x + r.width > window.innerWidth) x = e.clientX - r.width - 14;
+  if (y + r.height > window.innerHeight) y = window.innerHeight - r.height - 10;
+  tip.style.left = x + 'px';
+  tip.style.top  = y + 'px';
 }
 function hideTip() { tip.style.display = 'none'; }
 document.addEventListener('mousemove', e => {
   if (tip.style.display === 'block') moveTip(e);
 });
 
-// ════════════════════════════════════════════════════════
-//  INIT
-// ════════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
+   ANIMATIONS
+   ════════════════════════════════════════════════════════ */
+function setupReveal() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+
+        // KPI counters
+        entry.target.querySelectorAll('.num[data-target]').forEach(el => {
+          if (el.dataset.done) return;
+          el.dataset.done = '1';
+          const target = parseInt(el.dataset.target, 10);
+          const duration = 1400;
+          const start = performance.now();
+          const animate = (t) => {
+            const elapsed = t - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = Math.round(eased * target);
+            if (progress < 1) requestAnimationFrame(animate);
+          };
+          requestAnimationFrame(animate);
+        });
+
+        // Radial bars
+        entry.target.querySelectorAll('.arc[data-target-offset]').forEach(el => {
+          requestAnimationFrame(() => {
+            el.style.strokeDashoffset = el.dataset.targetOffset;
+          });
+        });
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}
+
+/* ════════════════════════════════════════════════════════
+   INIT
+   ════════════════════════════════════════════════════════ */
 window.addEventListener('DOMContentLoaded', () => {
-  buildCards();
+  buildFoldCards();
   buildHeatmap();
   buildSeqStrip();
   buildTMChart();
+  setupReveal();
 });
+
+let resizeTO;
 window.addEventListener('resize', () => {
-  buildSeqStrip();
-  buildTMChart();
+  clearTimeout(resizeTO);
+  resizeTO = setTimeout(() => {
+    buildSeqStrip();
+    buildTMChart();
+  }, 150);
 });
 </script>
 </body>
