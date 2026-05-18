@@ -1,0 +1,354 @@
+{
+  "PF01087": {
+    "name": "Galactose-1-phosphate uridyl transferase, N-terminal domain",
+    "type": "domain"
+  },
+  "PF26216": {
+    "name": "GDPGP1-like, C-terminal domain",
+    "type": "domain"
+  },
+  "PF05864": {
+    "name": "Chordopoxvirus DNA-directed RNA polymerase 7 kDa polypeptide (RPO7)",
+    "type": "family"
+  },
+  "PF00940": {
+    "name": "DNA-dependent RNA polymerase",
+    "type": "family"
+  },
+  "PF04565": {
+    "name": "RNA polymerase Rpb2, domain 3",
+    "type": "domain"
+  },
+  "PF01128": {
+    "name": "2-C-methyl-D-erythritol 4-phosphate cytidylyltransferase",
+    "type": "family"
+  },
+  "PF13177": {
+    "name": "DNA polymerase III, delta subunit",
+    "type": "domain"
+  },
+  "PF10620": {
+    "name": "Phosphoribosyl-dephospho-CoA transferase MdcG C-terminal domain",
+    "type": "domain"
+  },
+  "PF04928": {
+    "name": "Poly(A) polymerase central domain",
+    "type": "domain"
+  },
+  "PF01171": {
+    "name": "PP-loop domain",
+    "type": "domain"
+  },
+  "PF00799": {
+    "name": "Geminivirus Rep catalytic domain",
+    "type": "domain"
+  },
+  "PF01909": {
+    "name": "Nucleotidyltransferase domain",
+    "type": "domain"
+  },
+  "PF00680": {
+    "name": "Viral RNA-dependent RNA polymerase",
+    "type": "family"
+  },
+  "PF00998": {
+    "name": "Viral RNA dependent RNA polymerase",
+    "type": "family"
+  },
+  "PF00562": {
+    "name": "RNA polymerase Rpb2, domain 6",
+    "type": "domain"
+  },
+  "PF03396": {
+    "name": "Poxvirus DNA-directed RNA polymerase, 35 kD subunit",
+    "type": "family"
+  },
+  "PF09139": {
+    "name": "Phosphatidate cytidylyltransferase, mitochondrial",
+    "type": "family"
+  },
+  "PF22594": {
+    "name": "GTP-eEF1A C-terminal domain-like",
+    "type": "domain"
+  },
+  "PF03121": {
+    "name": "Herpesviridae UL52/UL70 DNA primase",
+    "type": "family"
+  },
+  "PF03175": {
+    "name": "DNA polymerase type B, organellar and viral",
+    "type": "family"
+  },
+  "PF08275": {
+    "name": "DNA primase catalytic core, N-terminal domain",
+    "type": "domain"
+  },
+  "PF12804": {
+    "name": "MobA-like NTP transferase domain",
+    "type": "domain"
+  },
+  "PF03604": {
+    "name": "DNA directed RNA polymerase, 7 kDa subunit",
+    "type": "domain"
+  },
+  "PF00994": {
+    "name": "Probable molybdopterin binding domain",
+    "type": "domain"
+  },
+  "PF04997": {
+    "name": "RNA polymerase Rpb1, domain 1",
+    "type": "domain"
+  },
+  "PF01194": {
+    "name": "RNA polymerases N / 8 kDa subunit",
+    "type": "domain"
+  },
+  "PF02696": {
+    "name": "Protein adenylyltransferase SelO",
+    "type": "family"
+  },
+  "PF04196": {
+    "name": "Bunyavirus RNA dependent RNA polymerase",
+    "type": "family"
+  },
+  "PF03296": {
+    "name": "Poxvirus poly(A) polymerase nucleotidyltransferase domain",
+    "type": "domain"
+  },
+  "PF18144": {
+    "name": "Second Messenger Oligonucleotide or Dinucleotide Synthetase domain",
+    "type": "domain"
+  },
+  "PF07984": {
+    "name": "Nucleotidyltransferase",
+    "type": "domain"
+  },
+  "PF03802": {
+    "name": "Apo-citrate lyase phosphoribosyl-dephospho-CoA transferase",
+    "type": "family"
+  },
+  "PF08335": {
+    "name": "GlnD PII-uridylyltransferase",
+    "type": "family"
+  },
+  "PF01507": {
+    "name": "Phosphoadenosine phosphosulfate reductase domain",
+    "type": "domain"
+  },
+  "PF04998": {
+    "name": "RNA polymerase Rpb1, domain 5",
+    "type": "domain"
+  },
+  "PF20266": {
+    "name": "Mab-21 protein HhH/H2TH-like domain",
+    "type": "domain"
+  },
+  "PF01743": {
+    "name": "Poly A polymerase head domain",
+    "type": "domain"
+  },
+  "PF13656": {
+    "name": "RNA polymerase Rpb3/Rpb11 dimerisation domain",
+    "type": "domain"
+  },
+  "PF05183": {
+    "name": "RNA dependent RNA polymerase",
+    "type": "family"
+  },
+  "PF00990": {
+    "name": "Diguanylate cyclase, GGDEF domain",
+    "type": "domain"
+  },
+  "PF24846": {
+    "name": "DNA polymerase II large subunit DP2, catalytic domain",
+    "type": "domain"
+  },
+  "PF01661": {
+    "name": "Macro domain",
+    "type": "domain"
+  },
+  "PF03291": {
+    "name": "mRNA (guanine-N(7))-methyltransferase domain",
+    "type": "domain"
+  },
+  "PF01192": {
+    "name": "RNA polymerase Rpb6",
+    "type": "family"
+  },
+  "PF03919": {
+    "name": "mRNA capping enzyme, C-terminal domain",
+    "type": "domain"
+  },
+  "PF00910": {
+    "name": "RNA helicase",
+    "type": "domain"
+  },
+  "PF00767": {
+    "name": "Potyvirus coat protein",
+    "type": "family"
+  },
+  "PF00589": {
+    "name": "Phage integrase family",
+    "type": "family"
+  },
+  "PF00899": {
+    "name": "ThiF family",
+    "type": "domain"
+  },
+  "PF00602": {
+    "name": "Influenza RNA-dependent RNA polymerase subunit PB1",
+    "type": "family"
+  },
+  "PF04042": {
+    "name": "DNA polymerase alpha/epsilon subunit B",
+    "type": "family"
+  },
+  "PF06317": {
+    "name": "Arenavirus RNA polymerase",
+    "type": "family"
+  },
+  "PF01864": {
+    "name": "CDP-archaeol synthase",
+    "type": "family"
+  },
+  "PF02457": {
+    "name": "DisA bacterial checkpoint controller nucleotide-binding",
+    "type": "family"
+  },
+  "PF06574": {
+    "name": "FAD synthetase",
+    "type": "family"
+  },
+  "PF14318": {
+    "name": "Mononegavirales mRNA-capping region V",
+    "type": "domain"
+  },
+  "PF07652": {
+    "name": "Flavivirus DEAD domain",
+    "type": "domain"
+  },
+  "PF00978": {
+    "name": "RNA dependent RNA polymerase",
+    "type": "family"
+  },
+  "PF01300": {
+    "name": "Telomere recombination",
+    "type": "domain"
+  },
+  "PF06929": {
+    "name": "Rotavirus VP3 protein",
+    "type": "family"
+  },
+  "PF00665": {
+    "name": "Integrase core domain",
+    "type": "domain"
+  },
+  "PF01191": {
+    "name": "RNA polymerase Rpb5, C-terminal domain",
+    "type": "domain"
+  },
+  "PF07288": {
+    "name": "RNA polymerase epsilon subunit",
+    "type": "domain"
+  },
+  "PF01983": {
+    "name": "Guanylyl transferase CofC like",
+    "type": "family"
+  },
+  "PF01966": {
+    "name": "HD domain",
+    "type": "family"
+  },
+  "PF02661": {
+    "name": "Fic/DOC family",
+    "type": "family"
+  },
+  "PF01747": {
+    "name": "ATP-sulfurylase",
+    "type": "domain"
+  },
+  "PF01704": {
+    "name": "UTP--glucose-1-phosphate uridylyltransferase",
+    "type": "family"
+  },
+  "PF22600": {
+    "name": "Poly(A) RNA polymerase, mitochondrial-like, central palm domain",
+    "type": "domain"
+  },
+  "PF04197": {
+    "name": "Birnavirus RNA dependent RNA polymerase (VP1), palm domain",
+    "type": "domain"
+  },
+  "PF13662": {
+    "name": "Toprim domain",
+    "type": "domain"
+  },
+  "PF01138": {
+    "name": "3' exoribonuclease family, domain 1",
+    "type": "domain"
+  },
+  "PF02123": {
+    "name": "Viral RNA-directed RNA-polymerase",
+    "type": "family"
+  },
+  "PF00929": {
+    "name": "Exonuclease",
+    "type": "domain"
+  },
+  "PF01896": {
+    "name": "DNA primase small subunit",
+    "type": "family"
+  },
+  "PF03104": {
+    "name": "DNA polymerase family B, exonuclease domain",
+    "type": "family"
+  },
+  "PF01148": {
+    "name": "Cytidylyltransferase family",
+    "type": "family"
+  },
+  "PF01000": {
+    "name": "RNA polymerase Rpb3/RpoA insert domain",
+    "type": "domain"
+  },
+  "PF04446": {
+    "name": "tRNAHis guanylyltransferase",
+    "type": "domain"
+  },
+  "PF02348": {
+    "name": "Cytidylyltransferase",
+    "type": "family"
+  },
+  "PF00476": {
+    "name": "DNA polymerase family A",
+    "type": "domain"
+  },
+  "PF01467": {
+    "name": "Cytidylyltransferase-like",
+    "type": "domain"
+  },
+  "PF07733": {
+    "name": "Bacterial DNA polymerase III alpha NTPase domain",
+    "type": "domain"
+  },
+  "PF14791": {
+    "name": "DNA polymerase beta thumb",
+    "type": "family"
+  },
+  "PF00483": {
+    "name": "Nucleotidyl transferase",
+    "type": "family"
+  },
+  "PF03129": {
+    "name": "Anticodon binding domain",
+    "type": "domain"
+  },
+  "PF00078": {
+    "name": "Reverse transcriptase (RNA-dependent DNA polymerase)",
+    "type": "domain"
+  },
+  "PF00817": {
+    "name": "impB/mucB/samB family",
+    "type": "family"
+  }
+}

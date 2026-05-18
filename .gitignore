@@ -1,1 +1,6 @@
 .claude/
+
+# Phylo pipeline — bulky regeneratable files
+phylo/results/trees/
+phylo/results/ec277_swissprot.tsv
+phylo/results/ec277_swissprot.fasta

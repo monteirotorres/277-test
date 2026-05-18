@@ -1,0 +1,389 @@
+{
+  "results": [
+    {
+      "pf": "PF01192",
+      "n_focal": 120,
+      "n_out": 55,
+      "elapsed_s": 127.0,
+      "n_sites": 5,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF01000",
+      "n_focal": 120,
+      "n_out": 55,
+      "elapsed_s": 147.5,
+      "n_sites": 103,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF00483",
+      "n_focal": 120,
+      "n_out": 55,
+      "elapsed_s": 164.5,
+      "n_sites": 92,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF01128",
+      "n_focal": 120,
+      "n_out": 55,
+      "elapsed_s": 182.2,
+      "n_sites": 120,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF02348",
+      "n_focal": 120,
+      "n_out": 55,
+      "elapsed_s": 192.4,
+      "n_sites": 51,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF01966",
+      "n_focal": 120,
+      "n_out": 55,
+      "elapsed_s": 217.6,
+      "n_sites": 112,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF01507",
+      "n_focal": 43,
+      "n_out": 55,
+      "elapsed_s": 94.3,
+      "n_sites": 160,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF02696",
+      "n_focal": 120,
+      "n_out": 55,
+      "elapsed_s": 185.9,
+      "n_sites": 178,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF04998",
+      "n_focal": 120,
+      "n_out": 55,
+      "elapsed_s": 515.9,
+      "n_sites": 808,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF01300",
+      "n_focal": 78,
+      "n_out": 55,
+      "elapsed_s": 105.6,
+      "n_sites": 48,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF04997",
+      "n_focal": 53,
+      "n_out": 55,
+      "elapsed_s": 190.0,
+      "n_sites": 289,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF01743",
+      "n_focal": 79,
+      "n_out": 55,
+      "elapsed_s": 124.9,
+      "n_sites": 153,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF07733",
+      "n_focal": 106,
+      "n_out": 55,
+      "elapsed_s": 307.9,
+      "n_sites": 1683,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF08335",
+      "n_focal": 59,
+      "n_out": 55,
+      "elapsed_s": 151.8,
+      "n_sites": 582,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF01747",
+      "n_focal": 73,
+      "n_out": 55,
+      "elapsed_s": 161.3,
+      "n_sites": 176,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF03104",
+      "n_focal": 105,
+      "n_out": 55,
+      "elapsed_s": 554.8,
+      "n_sites": 384,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF22594",
+      "n_focal": 109,
+      "n_out": 55,
+      "elapsed_s": 176.2,
+      "n_sites": 169,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF00602",
+      "n_focal": 108,
+      "n_out": 55,
+      "elapsed_s": 141.6,
+      "n_sites": 522,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF07288",
+      "n_focal": 103,
+      "n_out": 55,
+      "elapsed_s": 110.4,
+      "n_sites": 28,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF01983",
+      "n_focal": 86,
+      "n_out": 55,
+      "elapsed_s": 147.7,
+      "n_sites": 32,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF02457",
+      "n_focal": 74,
+      "n_out": 55,
+      "elapsed_s": 125.0,
+      "n_sites": 171,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF07652",
+      "n_focal": 96,
+      "n_out": 55,
+      "elapsed_s": 342.0,
+      "n_sites": 2751,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF14318",
+      "n_focal": 81,
+      "n_out": 55,
+      "elapsed_s": 280.8,
+      "n_sites": 1267,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF13662",
+      "n_focal": 70,
+      "n_out": 55,
+      "elapsed_s": 127.5,
+      "n_sites": 138,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF00899",
+      "n_focal": 66,
+      "n_out": 55,
+      "elapsed_s": 121.3,
+      "n_sites": 229,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF01896",
+      "n_focal": 63,
+      "n_out": 55,
+      "elapsed_s": 124.4,
+      "n_sites": 120,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF01194",
+      "n_focal": 55,
+      "n_out": 55,
+      "elapsed_s": 82.7,
+      "n_sites": 22,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF01087",
+      "n_focal": 55,
+      "n_out": 55,
+      "elapsed_s": 102.4,
+      "n_sites": 32,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF01148",
+      "n_focal": 59,
+      "n_out": 55,
+      "elapsed_s": 105.1,
+      "n_sites": 61,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF01864",
+      "n_focal": 54,
+      "n_out": 55,
+      "elapsed_s": 87.4,
+      "n_sites": 19,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF01704",
+      "n_focal": 54,
+      "n_out": 55,
+      "elapsed_s": 105.0,
+      "n_sites": 265,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF00665",
+      "n_focal": 52,
+      "n_out": 55,
+      "elapsed_s": 119.3,
+      "n_sites": 1327,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF08275",
+      "n_focal": 50,
+      "n_out": 55,
+      "elapsed_s": 119.4,
+      "n_sites": 254,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF00990",
+      "n_focal": 48,
+      "n_out": 55,
+      "elapsed_s": 116.2,
+      "n_sites": 152,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF01171",
+      "n_focal": 47,
+      "n_out": 55,
+      "elapsed_s": 101.1,
+      "n_sites": 180,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF01191",
+      "n_focal": 47,
+      "n_out": 55,
+      "elapsed_s": 81.0,
+      "n_sites": 6,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF13656",
+      "n_focal": 47,
+      "n_out": 55,
+      "elapsed_s": 81.7,
+      "n_sites": 23,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF22600",
+      "n_focal": 44,
+      "n_out": 55,
+      "elapsed_s": 145.4,
+      "n_sites": 53,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF02123",
+      "n_focal": 44,
+      "n_out": 55,
+      "elapsed_s": 126.2,
+      "n_sites": 6,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF20266",
+      "n_focal": 38,
+      "n_out": 55,
+      "elapsed_s": 116.5,
+      "n_sites": 15,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF03802",
+      "n_focal": 36,
+      "n_out": 55,
+      "elapsed_s": 88.3,
+      "n_sites": 96,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF00799",
+      "n_focal": 35,
+      "n_out": 55,
+      "elapsed_s": 92.7,
+      "n_sites": 210,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF06929",
+      "n_focal": 30,
+      "n_out": 55,
+      "elapsed_s": 79.6,
+      "n_sites": 155,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF24846",
+      "n_focal": 32,
+      "n_out": 55,
+      "elapsed_s": 150.5,
+      "n_sites": 697,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF03175",
+      "n_focal": 31,
+      "n_out": 55,
+      "elapsed_s": 106.4,
+      "n_sites": 16,
+      "tool": "fasttree"
+    },
+    {
+      "pf": "PF00680",
+      "n_focal": 120,
+      "n_out": 55,
+      "elapsed_s": 2237.7,
+      "n_sites": 7997,
+      "tool": "fasttree"
+    }
+  ],
+  "errors": [
+    {
+      "pf": "PF00978",
+      "err": "[Errno 2] No such file or directory: '/home/torres/phylo277/trees/PF00978/combined.trim'"
+    },
+    {
+      "pf": "PF02661",
+      "err": "[Errno 2] No such file or directory: '/home/torres/phylo277/trees/PF02661/combined.trim'"
+    }
+  ],
+  "params": {
+    "tool": "fasttree",
+    "min_size": 30,
+    "cap": 120,
+    "cdhit": 0.8,
+    "threads": 4
+  }
+}

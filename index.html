@@ -666,6 +666,105 @@ table.compare td:first-child { color: var(--text); font-weight: 500; }
 #tooltip .tt-uni { background: var(--indigo-dim); color: var(--indigo); }
 
 /* ─────────────────────────────────────────────────────────
+   PHYLO EXPLORER
+   ───────────────────────────────────────────────────────── */
+.phylo-explorer {
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+}
+.phylo-explorer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.phylo-label {
+  display: block;
+  font-family: var(--ff-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  margin-bottom: 0.5rem;
+}
+#phylo-select {
+  background: var(--bg-2);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  font-family: var(--ff-mono);
+  font-size: 0.88rem;
+  padding: 0.7rem 1rem;
+  border-radius: var(--radius);
+  min-width: 380px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+#phylo-select:hover { border-color: var(--indigo); }
+.phylo-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.8rem;
+  font-family: var(--ff-mono);
+}
+.phylo-stats .stat-item .lbl {
+  display: block;
+  color: var(--text-faint);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.2rem;
+}
+.phylo-stats .stat-item .val {
+  color: var(--text);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+.phylo-stats .stat-item .val.ok { color: var(--emerald); }
+.phylo-stats .stat-item .val.mid { color: var(--gold); }
+.phylo-stats .stat-item .val.low { color: var(--rose); }
+.phylo-tree-wrap {
+  background: rgba(0,0,0,0.25);
+  border-radius: var(--radius);
+  padding: 1rem;
+  overflow: auto;
+  max-height: 760px;
+  border: 1px solid var(--border);
+}
+.phylo-tree-wrap svg { display: block; }
+.phylo-tree-wrap .leaf-label { font-family: var(--ff-mono); font-size: 9px; cursor: pointer; }
+.phylo-tree-wrap .leaf-label.focal { fill: #d4dcf5; }
+.phylo-tree-wrap .leaf-label.outgroup { fill: #f06292; opacity: 0.85; }
+.phylo-tree-wrap .leaf-label:hover { fill: #fff; }
+.phylo-tree-wrap .branch { stroke: rgba(164,171,201,0.45); stroke-width: 1.2; fill: none; }
+.phylo-tree-wrap .branch.high-sup { stroke: #f5c518; stroke-width: 1.6; }
+.phylo-tree-wrap .branch.med-sup { stroke: #818cf8; stroke-width: 1.3; }
+.phylo-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  font-family: var(--ff-mono);
+}
+.phylo-pipeline {
+  margin-bottom: 2.5rem;
+}
+.phylo-error {
+  color: var(--rose);
+  font-family: var(--ff-mono);
+  font-size: 0.85rem;
+  padding: 1rem;
+}
+
+/* ─────────────────────────────────────────────────────────
    FOOTER
    ───────────────────────────────────────────────────────── */
 footer {
@@ -714,6 +813,7 @@ footer .footer-meta { margin-top: 0.5rem; color: var(--text-faint); font-size: 0
       <a href="#sec-heatmap">Mapa</a>
       <a href="#table">Contestação</a>
       <a href="#methods">Métodos</a>
+      <a href="#phylogeny">Filogenia</a>
     </div>
   </div>
 </nav>
@@ -1003,6 +1103,93 @@ footer .footer-meta { margin-top: 0.5rem; color: var(--text-faint); font-size: 0
       <div class="icon">04</div>
       <h4>Presença/ausência</h4>
       <p>Para cada fold, calcula-se quantos dos 48 resíduos do core possuem equivalente no alinhamento TM-align. <strong style="color:var(--emerald)">PRESENTE</strong> ≥ 70% · <strong style="color:var(--rose)">PARCIAL</strong> 40–69% · <strong style="color:var(--text-mute)">AUSENTE</strong> &lt; 40%.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ════════════════ PHYLOGENY ════════════════ -->
+<section id="phylogeny">
+<div class="container">
+  <div class="eyebrow">Análise filogenética</div>
+  <h2>Per-Pfam ML trees — não <em>uma árvore global</em>.</h2>
+  <p class="section-lead">
+    Refazendo a árvore do relatório <em>277.pplx.app</em> / biomni: em vez de uma única árvore ML
+    sobre 352 sequências alinhadas globalmente (dominada pelo sinal NTase β-palm),
+    separamos as 13.886 sequências Swiss-Prot com EC 2.7.7.* em <strong>88 famílias Pfam</strong> e
+    construímos uma árvore para cada uma das <strong>56 famílias com ≥ 30 membros</strong>,
+    enraizada com 1 representante de cada outra família como outgroup.
+  </p>
+
+  <div class="kpi-strip-grid reveal" style="margin-bottom: 2.5rem">
+    <div class="kpi-cell indigo">
+      <div class="num" data-target="13886">13.886</div>
+      <div class="label">Entradas Swiss-Prot</div>
+      <div class="sub">EC 2.7.7.* · reviewed:true</div>
+    </div>
+    <div class="kpi-cell emerald">
+      <div class="num" data-target="56">56</div>
+      <div class="label">Árvores ML construídas</div>
+      <div class="sub">Famílias Pfam com ≥ 30 membros</div>
+    </div>
+    <div class="kpi-cell gold">
+      <div class="num" data-target="88">88</div>
+      <div class="label">Famílias Pfam</div>
+      <div class="sub">647 Pfams distintos no dataset total</div>
+    </div>
+    <div class="kpi-cell text-c">
+      <div class="num">93%</div>
+      <div class="label">Trees com suporte mediano ≥ 0.7</div>
+      <div class="sub">UFBoot 1000 (IQ-TREE) · SH-aLRT (FastTree)</div>
+    </div>
+  </div>
+
+  <div class="phylo-pipeline reveal">
+    <div class="methods-grid">
+      <div class="method-card">
+        <div class="icon">01</div>
+        <h4>Aquisição</h4>
+        <p>UniProt REST stream com <code style="font-family:var(--ff-mono);background:var(--bg-2);padding:0.05rem 0.35rem;border-radius:3px;font-size:0.85em">(ec:2.7.7*) AND (reviewed:true)</code> → 13.886 entradas Swiss-Prot com sequência + Pfam crossrefs.</p>
+      </div>
+      <div class="method-card">
+        <div class="icon">02</div>
+        <h4>Mapeamento Pfam</h4>
+        <p>Cada proteína atribuída ao Pfam globalmente mais abundante em sua anotação → <strong style="color:var(--text)">88 famílias</strong> automáticas (vs 16 manuais do relatório original).</p>
+      </div>
+      <div class="method-card">
+        <div class="icon">03</div>
+        <h4>Outgroups</h4>
+        <p>Para cada árvore: 1 sequência (mediana de comprimento) de cada uma das outras famílias ≥ 30 → <strong style="color:var(--text)">55 outgroups</strong> por árvore focal.</p>
+      </div>
+      <div class="method-card">
+        <div class="icon">04</div>
+        <h4>MSA + trim</h4>
+        <p>CD-HIT 80% (cap 120 seqs); MAFFT <code style="font-family:var(--ff-mono);background:var(--bg-2);padding:0.05rem 0.3rem;border-radius:3px;font-size:0.85em">--auto --anysymbol</code>; trimAl <code style="font-family:var(--ff-mono);background:var(--bg-2);padding:0.05rem 0.3rem;border-radius:3px;font-size:0.85em">-automated1</code>.</p>
+      </div>
+      <div class="method-card">
+        <div class="icon">05</div>
+        <h4>Trees</h4>
+        <p>IQ-TREE LG+G4 + UFBoot 1000 + aLRT 1000 para <strong style="color:var(--text)">9 famílias canônicas</strong> (polimerases); FastTree -lg -gamma + SH-aLRT (~50× mais rápido) para as <strong style="color:var(--text)">47 demais</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="phylo-explorer reveal">
+    <div class="phylo-explorer-header">
+      <div style="flex:1; min-width: 280px">
+        <label class="phylo-label" for="phylo-select">Escolha uma família Pfam</label>
+        <select id="phylo-select"></select>
+      </div>
+      <div class="phylo-stats" id="phylo-stats"></div>
+    </div>
+    <div class="phylo-tree-wrap">
+      <svg id="phylo-tree"></svg>
+    </div>
+    <div class="phylo-legend">
+      <span class="legend-item"><div class="legend-sw" style="background:#d4dcf5"></div>Sequência focal (família)</span>
+      <span class="legend-item"><div class="legend-sw" style="background:#f06292"></div>Outgroup (rótulo <code style="font-family:var(--ff-mono);background:transparent;padding:0;font-size:0.9em">OG_PFxxxxx_…</code>)</span>
+      <span class="legend-item"><div class="legend-sw" style="background:#f5c518"></div>Ramo com suporte ≥ 0.9 (SH-aLRT) ou UFB ≥ 90</span>
+      <span class="legend-item"><div class="legend-sw" style="background:#818cf8"></div>Ramo com suporte 0.7–0.9</span>
     </div>
   </div>
 </div>
@@ -1492,6 +1679,234 @@ function setupReveal() {
 }
 
 /* ════════════════════════════════════════════════════════
+   PHYLOGENY — Newick parser + rectangular tree renderer
+   ════════════════════════════════════════════════════════ */
+function parseNewick(s) {
+  // simple recursive-descent Newick parser; returns root node {name, length, support, children}
+  let i = 0;
+  function parseSubtree() {
+    const node = { children: [] };
+    if (s[i] === '(') {
+      i++;
+      while (true) {
+        node.children.push(parseSubtree());
+        if (s[i] === ',') { i++; continue; }
+        if (s[i] === ')') { i++; break; }
+        break;
+      }
+    }
+    // label (after closing ')' it's the support value OR for leaves it's the name)
+    let label = '';
+    while (i < s.length && !':,()'.includes(s[i]) && s[i] !== ';') {
+      label += s[i++];
+    }
+    if (node.children.length === 0) {
+      node.name = label;
+    } else {
+      // internal label is support
+      const n = parseFloat(label);
+      if (!Number.isNaN(n)) node.support = n;
+    }
+    if (s[i] === ':') {
+      i++;
+      let len = '';
+      while (i < s.length && !',()'.includes(s[i]) && s[i] !== ';') {
+        len += s[i++];
+      }
+      node.length = parseFloat(len);
+    }
+    return node;
+  }
+  const root = parseSubtree();
+  return root;
+}
+
+function layoutTree(root) {
+  // Assign y to leaves equally, then propagate; assign x by cumulative branch length.
+  const leaves = [];
+  (function collect(n) {
+    if (n.children.length === 0) leaves.push(n);
+    else n.children.forEach(collect);
+  })(root);
+
+  leaves.forEach((leaf, i) => { leaf.y = i; });
+
+  // Cumulative depth (sum of branch lengths from root)
+  function assignDepth(n, d) {
+    n.depth = d + (n.length || 0);
+    n.children.forEach(c => assignDepth(c, n.depth));
+  }
+  assignDepth(root, 0);
+
+  // Post-order for internal nodes y as midpoint of children
+  function assignY(n) {
+    if (n.children.length === 0) return n.y;
+    const ys = n.children.map(assignY);
+    n.y = (Math.min(...ys) + Math.max(...ys)) / 2;
+    return n.y;
+  }
+  assignY(root);
+
+  return { leaves, root };
+}
+
+function renderTree(svg, root, opts) {
+  opts = opts || {};
+  const leafFont = 9;
+  const leafGap = 13;
+  const { leaves } = layoutTree(root);
+  const maxDepth = Math.max(...leaves.map(l => l.depth));
+
+  const labelW = 220; // label column width
+  const treeW = Math.max(700, 1200);
+  const W = treeW + labelW + 40;
+  const H = Math.max(400, leaves.length * leafGap + 40);
+  const padL = 20, padT = 20;
+
+  svg.setAttribute('width', W);
+  svg.setAttribute('height', H);
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+  const xScale = d => padL + (d / (maxDepth || 1)) * treeW;
+  const yScale = y => padT + 10 + y * leafGap;
+
+  const parts = [];
+
+  // Draw branches recursively
+  function drawBranches(n, parentX) {
+    const x = xScale(n.depth);
+    const y = yScale(n.y);
+    if (parentX !== null) {
+      // Horizontal branch
+      let cls = 'branch';
+      const sup = n.support;
+      if (sup != null) {
+        // Heuristic for both SH-aLRT (0..1) and UFB% (0..100)
+        const norm = sup > 1.0 ? sup / 100 : sup;
+        if (norm >= 0.9) cls += ' high-sup';
+        else if (norm >= 0.7) cls += ' med-sup';
+      }
+      parts.push(`<line class="${cls}" x1="${parentX}" y1="${y}" x2="${x}" y2="${y}"/>`);
+    }
+    if (n.children.length) {
+      const ys = n.children.map(c => yScale(c.y));
+      // Vertical connector
+      parts.push(`<line class="branch" x1="${x}" y1="${Math.min(...ys)}" x2="${x}" y2="${Math.max(...ys)}"/>`);
+      n.children.forEach(c => drawBranches(c, x));
+    }
+  }
+  drawBranches(root, null);
+
+  // Draw leaf labels
+  for (const leaf of leaves) {
+    const x = xScale(leaf.depth);
+    const y = yScale(leaf.y);
+    const name = leaf.name || '';
+    const isOG = name.startsWith('OG_');
+    let display = name;
+    let title = name;
+    if (isOG) {
+      // OG_PFxxxxx_ACC → show only PFxxxxx · ACC
+      const m = name.match(/^OG_(PF\d+)_(.+)$/);
+      if (m) display = `${m[1]} · ${m[2]}`;
+    }
+    parts.push(`<text class="leaf-label ${isOG ? 'outgroup' : 'focal'}"
+      x="${x + 4}" y="${y + leafFont * 0.35}">${display}</text>`);
+  }
+
+  // Scale bar
+  if (maxDepth > 0) {
+    const scaleBarLen = treeW * 0.1;
+    const sb_y = H - 16;
+    const sb_x = padL + 20;
+    const val = (0.1 * maxDepth).toFixed(2);
+    parts.push(`<line x1="${sb_x}" y1="${sb_y}" x2="${sb_x + scaleBarLen}" y2="${sb_y}" stroke="#a4abc9" stroke-width="1.2"/>`);
+    parts.push(`<line x1="${sb_x}" y1="${sb_y-4}" x2="${sb_x}" y2="${sb_y+4}" stroke="#a4abc9" stroke-width="1.2"/>`);
+    parts.push(`<line x1="${sb_x+scaleBarLen}" y1="${sb_y-4}" x2="${sb_x+scaleBarLen}" y2="${sb_y+4}" stroke="#a4abc9" stroke-width="1.2"/>`);
+    parts.push(`<text x="${sb_x + scaleBarLen + 8}" y="${sb_y + 4}"
+      font-family="JetBrains Mono" font-size="10" fill="#a4abc9">${val} subs/site</text>`);
+  }
+
+  svg.innerHTML = parts.join('');
+}
+
+async function loadManifest() {
+  try {
+    const r = await fetch('trees/manifest.json');
+    return r.ok ? await r.json() : null;
+  } catch (e) { return null; }
+}
+
+async function loadTree(pf) {
+  try {
+    const r = await fetch(`trees/${pf}.nwk`);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return await r.text();
+  } catch (e) { return null; }
+}
+
+function supportClass(sup, type) {
+  if (sup == null) return '';
+  const norm = (type === 'UFB%') ? sup / 100 : sup;
+  if (norm >= 0.85) return 'ok';
+  if (norm >= 0.7) return 'mid';
+  return 'low';
+}
+
+async function setupPhylo() {
+  const select = document.getElementById('phylo-select');
+  const stats = document.getElementById('phylo-stats');
+  const svg = document.getElementById('phylo-tree');
+  if (!select || !svg) return;
+
+  const manifest = await loadManifest();
+  if (!manifest) {
+    svg.innerHTML = '';
+    select.outerHTML = '<div class="phylo-error">Manifesto não disponível. Servindo o site? Confira <code>trees/manifest.json</code>.</div>';
+    return;
+  }
+
+  // Populate select (already sorted by total count desc)
+  for (const t of manifest.trees) {
+    const opt = document.createElement('option');
+    opt.value = t.pf;
+    const supTxt = t.support != null ? ` · sup=${t.support.toFixed(t.support <= 1 ? 2 : 0)}` : '';
+    opt.textContent = `${t.pf} · ${t.name.slice(0, 60)} · n=${t.n_taxa}${supTxt}`;
+    select.appendChild(opt);
+  }
+
+  async function show(pf) {
+    const t = manifest.trees.find(x => x.pf === pf);
+    if (!t) return;
+    const sup = t.support;
+    const supS = sup == null ? '—' : (t.support_type === 'UFB%' ? `${sup.toFixed(0)}%` : sup.toFixed(2));
+    const supCls = supportClass(sup, t.support_type);
+    stats.innerHTML = `
+      <div class="stat-item"><div class="lbl">Pfam</div><div class="val">${t.pf}</div></div>
+      <div class="stat-item"><div class="lbl">Total no dataset</div><div class="val">${t.count_total}</div></div>
+      <div class="stat-item"><div class="lbl">Táxons na árvore</div><div class="val">${t.n_taxa}</div></div>
+      <div class="stat-item"><div class="lbl">Sites (trim)</div><div class="val">${t.n_sites || '—'}</div></div>
+      <div class="stat-item"><div class="lbl">Tool</div><div class="val">${t.tool}</div></div>
+      <div class="stat-item"><div class="lbl">${t.support_type || 'Support'} (mediana)</div><div class="val ${supCls}">${supS}</div></div>
+    `;
+    svg.innerHTML = '<text x="40" y="30" font-family="JetBrains Mono" font-size="11" fill="#a4abc9">carregando árvore…</text>';
+    const nwk = await loadTree(pf);
+    if (!nwk) {
+      svg.innerHTML = '<text x="40" y="30" font-family="JetBrains Mono" font-size="11" fill="#f06292">erro carregando árvore</text>';
+      return;
+    }
+    const root = parseNewick(nwk.trim());
+    renderTree(svg, root);
+  }
+
+  select.addEventListener('change', e => show(e.target.value));
+  // Default to PF00562 (RNAP β-palm) if present, else first
+  const defaultPf = manifest.trees.find(t => t.pf === 'PF00562') ? 'PF00562' : manifest.trees[0].pf;
+  select.value = defaultPf;
+  show(defaultPf);
+}
+
+/* ════════════════════════════════════════════════════════
    INIT
    ════════════════════════════════════════════════════════ */
 window.addEventListener('DOMContentLoaded', () => {
@@ -1500,6 +1915,7 @@ window.addEventListener('DOMContentLoaded', () => {
   buildSeqStrip();
   buildTMChart();
   setupReveal();
+  setupPhylo();
 });
 
 let resizeTO;

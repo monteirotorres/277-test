@@ -1,0 +1,57 @@
+pf	name	n_pfam_total	tool	n_taxa	n_sites	support_type	median_support	status
+PF00078	Reverse transcriptase (RNA-dependent DNA polymeras	271	iqtree	152	160	UFB%	94.0	ok
+PF00476	DNA polymerase family A	62	iqtree	117	751	UFB%	96.0	ok
+PF00483	Nucleotidyl transferase	613	fasttree	175	?	SH-aLRT	0.784	ok
+PF00562	RNA polymerase Rpb2, domain 6	946	iqtree	175	1060	UFB%	97.5	ok
+PF00602	Influenza RNA-dependent RNA polymerase subunit PB1	108	fasttree	163	?	SH-aLRT	0.744	ok
+PF00665	Integrase core domain	52	fasttree	107	?	SH-aLRT	0.819	ok
+PF00680	Viral RNA-dependent RNA polymerase	251	fasttree	175	?	SH-aLRT	0.976	ok
+PF00799	Geminivirus Rep catalytic domain	35	fasttree	90	?	SH-aLRT	0.756	ok
+PF00817	impB/mucB/samB family	249	iqtree	174	348	UFB%	96.0	ok
+PF00899	ThiF family	66	fasttree	121	?	SH-aLRT	0.781	ok
+PF00978	RNA dependent RNA polymerase	139	fasttree	131	?	SH-aLRT	0.95	ok
+PF00990	Diguanylate cyclase, GGDEF domain	48	fasttree	103	?	SH-aLRT	0.71	ok
+PF01000	RNA polymerase Rpb3/RpoA insert domain	825	fasttree	175	?	SH-aLRT	0.786	ok
+PF01087	Galactose-1-phosphate uridyl transferase, N-termin	55	fasttree	110	?	SH-aLRT	0.743	ok
+PF01128	2-C-methyl-D-erythritol 4-phosphate cytidylyltrans	505	fasttree	175	?	SH-aLRT	0.728	ok
+PF01138	3' exoribonuclease family, domain 1	1203	iqtree	175	682	UFB%	94.0	ok
+PF01148	Cytidylyltransferase family	59	fasttree	114	?	SH-aLRT	0.78	ok
+PF01171	PP-loop domain	47	fasttree	102	?	SH-aLRT	0.787	ok
+PF01191	RNA polymerase Rpb5, C-terminal domain	47	fasttree	95	?	SH-aLRT	0.76	ok
+PF01192	RNA polymerase Rpb6	686	fasttree	156	?	SH-aLRT	0.761	ok
+PF01194	RNA polymerases N / 8 kDa subunit	55	fasttree	110	?	SH-aLRT	0.748	ok
+PF01300	Telomere recombination	170	fasttree	133	?	SH-aLRT	0.749	ok
+PF01467	Cytidylyltransferase-like	1425	iqtree	175	96	UFB%	92.0	ok
+PF01507	Phosphoadenosine phosphosulfate reductase domain	235	fasttree	98	?	SH-aLRT	0.765	ok
+PF01704	UTP--glucose-1-phosphate uridylyltransferase	54	fasttree	109	?	SH-aLRT	0.782	ok
+PF01743	Poly A polymerase head domain	153	fasttree	134	?	SH-aLRT	0.755	ok
+PF01747	ATP-sulfurylase	127	fasttree	128	?	SH-aLRT	0.79	ok
+PF01864	CDP-archaeol synthase	54	fasttree	100	?	SH-aLRT	0.712	ok
+PF01896	DNA primase small subunit	63	fasttree	118	?	SH-aLRT	0.776	ok
+PF01909	Nucleotidyltransferase domain	77	iqtree	132	491	UFB%	88.5	ok
+PF01966	HD domain	382	fasttree	173	?	SH-aLRT	0.798	ok
+PF01983	Guanylyl transferase CofC like	86	fasttree	140	?	SH-aLRT	0.728	ok
+PF02123	Viral RNA-directed RNA-polymerase	44	fasttree	91	?	SH-aLRT	0.71	ok
+PF02348	Cytidylyltransferase	419	fasttree	175	?	SH-aLRT	0.769	ok
+PF02457	DisA bacterial checkpoint controller nucleotide-bi	74	fasttree	129	?	SH-aLRT	0.741	ok
+PF02661	Fic/DOC family	35	fasttree	90	?	SH-aLRT	0.758	ok
+PF02696	Protein adenylyltransferase SelO	259	fasttree	175	?	SH-aLRT	0.78	ok
+PF03104	DNA polymerase family B, exonuclease domain	149	fasttree	160	?	SH-aLRT	0.843	ok
+PF03175	DNA polymerase type B, organellar and viral	31	fasttree	86	?	SH-aLRT	0.696	ok
+PF03802	Apo-citrate lyase phosphoribosyl-dephospho-CoA tra	36	fasttree	91	?	SH-aLRT	0.775	ok
+PF04997	RNA polymerase Rpb1, domain 1	176	fasttree	108	?	SH-aLRT	0.777	ok
+PF04998	RNA polymerase Rpb1, domain 5	932	fasttree	175	?	SH-aLRT	0.873	ok
+PF06929	Rotavirus VP3 protein	30	fasttree	85	?	SH-aLRT	0.747	ok
+PF07288	RNA polymerase epsilon subunit	103	fasttree	158	?	SH-aLRT	0.736	ok
+PF07652	Flavivirus DEAD domain	96	fasttree	151	?	SH-aLRT	0.934	ok
+PF07733	Bacterial DNA polymerase III alpha NTPase domain	204	fasttree	161	?	SH-aLRT	0.929	ok
+PF08275	DNA primase catalytic core, N-terminal domain	50	fasttree	105	?	SH-aLRT	0.77	ok
+PF08335	GlnD PII-uridylyltransferase	138	fasttree	114	?	SH-aLRT	0.811	ok
+PF12804	MobA-like NTP transferase domain	680	iqtree	175	414	UFB%	95.5	ok
+PF13656	RNA polymerase Rpb3/Rpb11 dimerisation domain	47	fasttree	101	?	SH-aLRT	0.765	ok
+PF13662	Toprim domain	70	fasttree	125	?	SH-aLRT	0.76	ok
+PF14318	Mononegavirales mRNA-capping region V	81	fasttree	136	?	SH-aLRT	0.923	ok
+PF20266	Mab-21 protein HhH/H2TH-like domain	38	fasttree	89	?	SH-aLRT	0.667	ok
+PF22594	GTP-eEF1A C-terminal domain-like	109	fasttree	164	?	SH-aLRT	0.718	ok
+PF22600	Poly(A) RNA polymerase, mitochondrial-like, centra	44	fasttree	99	?	SH-aLRT	0.76	ok
+PF24846	DNA polymerase II large subunit DP2, catalytic dom	32	fasttree	87	?	SH-aLRT	0.794	ok

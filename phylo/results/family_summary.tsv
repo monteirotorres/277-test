@@ -1,0 +1,89 @@
+pfam_acc	pfam_name	count	sample_member	sample_ec
+PF01467	Cytidylyltransferase-like	1425	NMNAT_ARATH	2.7.7.1; 2.7.7.18
+PF01138	3' exoribonuclease family, domain 1	1203	PNP_ECOLI	2.7.7.8
+PF00562	RNA polymerase Rpb2, domain 6	946	RPB2_BOVIN	2.7.7.48; 2.7.7.6; 3.1.13.-
+PF04998	RNA polymerase Rpb1, domain 5	932	RPB1_BOVIN	2.7.7.48; 2.7.7.6; 3.1.13.-
+PF01000	RNA polymerase Rpb3/RpoA insert domain	825	RPOA_ECOLI	2.7.7.6
+PF01192	RNA polymerase Rpb6	686	RPOZ_ECOLI	2.7.7.6
+PF12804	MobA-like NTP transferase domain	680	GLMU_MICAN	2.3.1.157; 2.7.7.23
+PF00483	Nucleotidyl transferase	613	GMPP1_ARATH	2.7.7.13
+PF01128	2-C-methyl-D-erythritol 4-phosphate cytidylyltransferase	505	ISPD_DANRE	2.7.7.40
+PF02348	Cytidylyltransferase	419	NEUAA_DANRE	2.7.7.43
+PF01966	HD domain	382	CAS10_STRTR	2.7.7.-; 3.1.-.-
+PF00078	Reverse transcriptase (RNA-dependent DNA polymerase)	271	POL_XMRV6	2.7.7.-; 2.7.7.49; 2.7.7.7; 3.1.-.-; 3.1.26.4; 3.4.23.-
+PF02696	Protein adenylyltransferase SelO	259	SELO_ECOLI	2.7.7.-; 2.7.7.108
+PF00680	Viral RNA-dependent RNA polymerase	251	POLG_BVY3	2.7.7.48; 3.4.21.-; 3.4.22.44; 3.4.22.45; 3.6.4.-
+PF00817	impB/mucB/samB family	249	REV1_ARATH	2.7.7.-
+PF01507	Phosphoadenosine phosphosulfate reductase domain	235	FAD1_RAT	2.7.7.2; 3.6.1.18; 3.6.1.22
+PF07733	Bacterial DNA polymerase III alpha NTPase domain	204	DPO3A_ECOLI	2.7.7.7
+PF04997	RNA polymerase Rpb1, domain 1	176	RPOC1_CUSRE	2.7.7.6
+PF01300	Telomere recombination	170	SUA5_YEAST	2.7.7.87
+PF01743	Poly A polymerase head domain	153	TRNT1_DANRE	2.7.7.72
+PF03104	DNA polymerase family B, exonuclease domain	149	DPOE1_ARATH	2.7.7.7
+PF00978	RNA dependent RNA polymerase	139	POLN_RUBVR	2.7.7.48; 3.4.22.-; 3.6.1.15; 3.6.4.13
+PF08335	GlnD PII-uridylyltransferase	138	GLNE_ECOLI	2.7.7.42; 2.7.7.89
+PF01747	ATP-sulfurylase	127	PAPS1_HUMAN	2.7.1.25; 2.7.7.4
+PF22594	GTP-eEF1A C-terminal domain-like	109	CYSNC_PSEAE	2.7.1.25; 2.7.7.4
+PF00602	Influenza RNA-dependent RNA polymerase subunit PB1	108	RDRP_I33A0	2.7.7.48
+PF07288	RNA polymerase epsilon subunit	103	RPOY_BACSU	2.7.7.6
+PF07652	Flavivirus DEAD domain	96	POLG_ZIKVF	2.1.1.56; 2.1.1.57; 2.7.7.48; 3.4.21.91; 3.6.1.15; 3.6.4.13
+PF01983	Guanylyl transferase CofC like	86	COFC_METJA	2.7.7.68
+PF14318	Mononegavirales mRNA-capping region V	81	L_RABVI	2.7.7.48; 2.7.7.88; 3.6.1.-
+PF01909	Nucleotidyltransferase domain	77	OAS2_MOUSE	2.7.7.84
+PF02457	DisA bacterial checkpoint controller nucleotide-binding	74	DISA_MYCS2	2.7.7.85
+PF13662	Toprim domain	70	TWIH_ARATH	2.7.7.-; 5.6.2.3
+PF00899	ThiF family	66	MOCS3_BOVIN	2.7.7.80; 2.8.1.11
+PF01896	DNA primase small subunit	63	PRI1_SCHPO	2.7.7.102
+PF00476	DNA polymerase family A	62	POLIA_ARATH	2.7.7.7
+PF01148	Cytidylyltransferase family	59	CDS2_BOVIN	2.7.7.41
+PF01087	Galactose-1-phosphate uridyl transferase, N-terminal domain	55	GALT_HUMAN	2.7.7.12
+PF01194	RNA polymerases N / 8 kDa subunit	55	RPO10_SACSH	2.7.7.6
+PF01704	UTP--glucose-1-phosphate uridylyltransferase	54	UGPA3_ARATH	2.7.7.9
+PF01864	CDP-archaeol synthase	54	CDPAS_METLZ	2.7.7.67
+PF00665	Integrase core domain	52	YP41B_YEAST	2.7.7.49; 2.7.7.7; 3.1.26.4; 3.4.23.-
+PF08275	DNA primase catalytic core, N-terminal domain	50	DNAG_ECOLI	2.7.7.101
+PF00990	Diguanylate cyclase, GGDEF domain	48	TPBB_PSEAB	2.7.7.65
+PF01171	PP-loop domain	47	NCSA_HALVD	2.7.7.-
+PF01191	RNA polymerase Rpb5, C-terminal domain	47	RPO5_SULAC	2.7.7.6
+PF13656	RNA polymerase Rpb3/Rpb11 dimerisation domain	47	RPO11_SULAC	2.7.7.6
+PF22600	Poly(A) RNA polymerase, mitochondrial-like, central palm domain	44	STPAP_XENTR	2.7.7.19; 2.7.7.52
+PF02123	Viral RNA-directed RNA-polymerase	44	RDRP_SBMVA	2.7.7.48; 3.4.21.-
+PF20266	Mab-21 protein HhH/H2TH-like domain	38	CGLR1_DROME	2.7.7.-
+PF03802	Apo-citrate lyase phosphoribosyl-dephospho-CoA transferase	36	CITXG_LEUMC	2.4.2.52; 2.7.7.61
+PF02661	Fic/DOC family	35	FICD_CRIGR	2.7.7.108; 3.1.4.-
+PF00799	Geminivirus Rep catalytic domain	35	REP_BEYDV	2.7.7.-; 3.1.21.-
+PF24846	DNA polymerase II large subunit DP2, catalytic domain	32	DP2L_PYRHO	2.7.7.7; 3.1.11.1
+PF03175	DNA polymerase type B, organellar and viral	31	DPOL_BPPH2	2.7.7.7; 3.1.11.-
+PF06929	Rotavirus VP3 protein	30	VP3_ROTSH	2.1.1.56; 2.7.7.50; 3.1.4.-
+PF00940	DNA-dependent RNA polymerase	29	RPOM_HUMAN	2.7.7.6
+PF03296	Poxvirus poly(A) polymerase nucleotidyltransferase domain	28	PAP1_VACCW	2.7.7.19
+PF14791	DNA polymerase beta thumb	25	DPOLB_XENLA	2.7.7.7; 4.2.99.-; 4.2.99.18
+PF03121	Herpesviridae UL52/UL70 DNA primase	24	PRIPO_CHICK	2.7.7.102; 2.7.7.7
+PF04196	Bunyavirus RNA dependent RNA polymerase	24	L_RVFV	2.7.7.48; 3.1.-.-
+PF01661	Macro domain	22	R1A_MERS1	2.7.7.50; 3.4.19.12; 3.4.22.-; 3.4.22.69
+PF00910	RNA helicase	22	MREP_FBNY2	2.7.7.-; 3.1.21.-; 3.6.1.-
+PF06317	Arenavirus RNA polymerase	22	L_LYCVA	2.7.7.48; 3.1.-.-
+PF00998	Viral RNA dependent RNA polymerase	21	POLG_HCVEV	2.7.7.48; 3.4.21.98; 3.4.22.-; 3.6.1.15; 3.6.4.13
+PF03291	mRNA (guanine-N(7))-methyltransferase domain	20	MCEL_MONPV	2.1.1.56; 2.7.7.50; 3.6.1.74
+PF04928	Poly(A) polymerase central domain	20	PAPS2_ARATH	2.7.7.19
+PF13177	DNA polymerase III, delta subunit	20	DPO3X_ECOLI	2.7.7.7
+PF06574	FAD synthetase	20	MNMA_MYCGA	2.7.1.26; 2.7.7.2; 2.8.1.13
+PF03604	DNA directed RNA polymerase, 7 kDa subunit	20	RPO12_SULAC	2.7.7.6
+PF10620	Phosphoribosyl-dephospho-CoA transferase MdcG C-terminal domain	17	MDCG_KLEPN	2.7.7.66
+PF00929	Exonuclease	16	DPO3E_ECOLI	2.7.7.7
+PF00994	Probable molybdopterin binding domain	16	CIN_DROME	2.10.1.1; 2.7.7.75
+PF00589	Phage integrase family	16	VINT_LAMBD	2.7.7.-; 3.1.-.-
+PF03919	mRNA capping enzyme, C-terminal domain	15	MCE1_MOUSE	2.7.7.50; 3.6.1.74
+PF04446	tRNAHis guanylyltransferase	15	THG1_YEAST	2.7.7.79
+PF07984	Nucleotidyltransferase	14	TET5A_MOUSE	2.7.7.19
+PF05183	RNA dependent RNA polymerase	12	RDP1_SCHPO	2.7.7.48
+PF03129	Anticodon binding domain	12	SYGM1_ARATH	2.7.7.-; 6.1.1.14
+PF09139	Phosphatidate cytidylyltransferase, mitochondrial	12	TAM41_YEAST	2.7.7.41
+PF05864	Chordopoxvirus DNA-directed RNA polymerase 7 kDa polypeptide (RPO7)	12	RP07_VACCA	2.7.7.6
+PF04565	RNA polymerase Rpb2, domain 3	11	RPOB1_PLETE	2.7.7.6
+PF26216	GDPGP1-like, C-terminal domain	10	GDPP1_CAEEL	2.7.7.78
+PF04197	Birnavirus RNA dependent RNA polymerase (VP1), palm domain	9	RDRP_IBDVB	2.7.7.48
+PF03396	Poxvirus DNA-directed RNA polymerase, 35 kD subunit	9	RP35_VACCA	2.7.7.6
+PF18144	Second Messenger Oligonucleotide or Dinucleotide Synthetase domain	8	CDND2_ENTH5	2.7.7.-
+PF04042	DNA polymerase alpha/epsilon subunit B	8	DPOD2_YEAST	2.7.7.7
+PF00767	Potyvirus coat protein	8	POLG_PEMV	2.7.7.48

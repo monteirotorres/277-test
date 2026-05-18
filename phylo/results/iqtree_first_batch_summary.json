@@ -1,0 +1,70 @@
+{
+  "results": [
+    {
+      "pf": "PF01467",
+      "n_focal": 120,
+      "n_out": 55,
+      "elapsed_s": 2476.2377490997314
+    },
+    {
+      "pf": "PF12804",
+      "n_focal": 120,
+      "n_out": 55,
+      "elapsed_s": 7093.752783298492
+    },
+    {
+      "pf": "PF00078",
+      "n_focal": 97,
+      "n_out": 55,
+      "elapsed_s": 5949.516536951065
+    },
+    {
+      "pf": "PF00680",
+      "n_focal": 120,
+      "n_out": 55,
+      "elapsed_s": 3470.629334449768
+    },
+    {
+      "pf": "PF00817",
+      "n_focal": 119,
+      "n_out": 55,
+      "elapsed_s": 2775.1224842071533
+    },
+    {
+      "pf": "PF01138",
+      "n_focal": 120,
+      "n_out": 55,
+      "elapsed_s": 14051.774620294571
+    },
+    {
+      "pf": "PF01909",
+      "n_focal": 77,
+      "n_out": 55,
+      "elapsed_s": 9944.728755235672
+    },
+    {
+      "pf": "PF00476",
+      "n_focal": 62,
+      "n_out": 55,
+      "elapsed_s": 11399.467914104462
+    },
+    {
+      "pf": "PF00562",
+      "n_focal": 120,
+      "n_out": 55,
+      "elapsed_s": 23670.85992527008
+    }
+  ],
+  "errors": [
+    {
+      "pf": "PF02696",
+      "err": "MAFFT failed for PF02696"
+    }
+  ],
+  "params": {
+    "min_size": 30,
+    "cap": 120,
+    "cdhit": 0.8,
+    "threads": 4
+  }
+}
