@@ -2226,11 +2226,11 @@ async function setupPhylo() {
       currentView = btn.dataset.view;
       document.querySelectorAll('.view-btn').forEach(b => b.classList.toggle('active', b === btn));
       if (currentView === 'tree') {
-        treePanel.style.display = '';
+        treePanel.style.display = 'block';
         alnPanel.style.display  = 'none';
       } else {
         treePanel.style.display = 'none';
-        alnPanel.style.display  = '';
+        alnPanel.style.display  = 'block';
         if (currentPf) await showAlignment(currentPf);
       }
     });
