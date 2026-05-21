@@ -371,8 +371,8 @@ h1 .gradient {
    CORRECTION
    ───────────────────────────────────────────────────────── */
 .correction {
-  background: linear-gradient(135deg, rgba(240,98,146,0.05) 0%, rgba(245,197,24,0.03) 100%);
-  border: 1px solid rgba(240,98,146,0.2);
+  background: linear-gradient(135deg, rgba(129,140,248,0.05) 0%, rgba(52,211,153,0.03) 100%);
+  border: 1px solid rgba(129,140,248,0.2);
   border-radius: var(--radius-lg);
   padding: 2.5rem;
   display: grid;
@@ -386,7 +386,7 @@ h1 .gradient {
   position: absolute;
   top: 0; left: 0;
   width: 3px; height: 100%;
-  background: var(--rose);
+  background: var(--indigo);
 }
 @media (max-width: 720px) { .correction { grid-template-columns: 1fr; padding: 1.8rem; } }
 
@@ -862,6 +862,109 @@ footer .footer-meta { margin-top: 0.5rem; color: var(--text-faint); font-size: 0
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
 }
+
+/* ─────────────────────────────────────────────────────────
+   STRUCTURE VIEWER
+   ───────────────────────────────────────────────────────── */
+.struct-card {
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+.struct-fold-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 1.2rem 1.4rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+}
+.struct-fold-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-mute);
+  font-family: var(--ff-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.35rem 0.8rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.18s;
+  letter-spacing: 0.02em;
+}
+.struct-fold-btn:hover { color: var(--text); border-color: var(--border-strong); }
+.struct-fold-btn.active {
+  color: #07070c;
+  border-color: transparent;
+}
+.struct-viewer-wrap {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  min-height: 500px;
+}
+@media (max-width: 900px) { .struct-viewer-wrap { grid-template-columns: 1fr; } }
+#struct-3dmol {
+  width: 100%;
+  height: 500px;
+  position: relative;
+  background: #07070c;
+}
+.struct-info-panel {
+  padding: 1.4rem;
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+}
+.struct-info-panel .fold-name {
+  font-family: var(--ff-display);
+  font-size: 1.8rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.struct-info-panel .pdb-code {
+  font-family: var(--ff-mono);
+  font-size: 0.75rem;
+  color: var(--text-mute);
+  margin-top: 0.2rem;
+}
+.struct-coverage-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--bg-3);
+  overflow: hidden;
+}
+.struct-coverage-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.8s cubic-bezier(0.25,1,0.5,1);
+}
+.struct-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.72rem;
+  font-family: var(--ff-mono);
+  color: var(--text-mute);
+}
+.struct-legend-item { display: flex; align-items: center; gap: 0.5rem; }
+.struct-swatch { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+.struct-loading {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: #07070c;
+  font-family: var(--ff-mono);
+  font-size: 0.82rem;
+  color: var(--text-mute);
+  pointer-events: none;
+}
 </style>
 </head>
 <body>
@@ -908,8 +1011,7 @@ footer .footer-meta { margin-top: 0.5rem; color: var(--text-faint); font-size: 0
       <span class="gradient">famílias de polimerases.</span>
     </h1>
     <p class="hero-sub reveal in">
-      Detecção local do motivo conservado de <a href="https://doi.org/10.1093/molbev/msw038" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline;text-underline-offset:3px">Mönttinen <em>et al.</em> (2016)</a> nas polimerases de ácido nucleico (EC 2.7.7.*),
-      com correção crítica do erro de cadeia presente no relatório original gerado em <code style="font-family:var(--ff-mono);background:var(--bg-2);padding:0.1rem 0.4rem;border-radius:4px;font-size:0.85em">277.pplx.app</code>.
+      Detecção local do motivo conservado de <a href="https://doi.org/10.1093/molbev/msw038" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline;text-underline-offset:3px">Mönttinen <em>et al.</em> (2016)</a> nas polimerases de ácido nucleico (EC 2.7.7.*), usando alinhamento estrutural par-a-par com TM-align e uma definição de core baseada em presença em ≥ 5/6 folds.
     </p>
     <div class="hero-meta reveal in">
       <div class="item">
@@ -966,7 +1068,7 @@ footer .footer-meta { margin-top: 0.5rem; color: var(--text-faint); font-size: 0
       <div class="kpi-cell text-c">
         <div class="num" data-target="4">4</div>
         <div class="label">Resíduos universais (6/6 folds)</div>
-        <div class="sub">Original: "1 — artefato"</div>
+        <div class="sub">Phe34 · Val35 · Lys197 · Ala199</div>
       </div>
       <div class="kpi-cell gold">
         <div class="num" data-target="2">2</div>
@@ -974,41 +1076,42 @@ footer .footer-meta { margin-top: 0.5rem; color: var(--text-faint); font-size: 0
         <div class="sub">Asp22 · Asp33 — two-metal-ion</div>
       </div>
       <div class="kpi-cell rose">
-        <div class="num">+30%</div>
-        <div class="label">TM NTase↔RNAP corrigido</div>
-        <div class="sub">0.242 → 0.315 (cadeia B → C)</div>
+        <div class="num">0.315</div>
+        <div class="label">TM-score NTase↔RNAP</div>
+        <div class="sub">1HQM cadeia C · subunidade β</div>
       </div>
     </div>
   </div>
 </div>
 </section>
 
-<!-- ════════════════ CORRECTION ════════════════ -->
+<!-- ════════════════ CHAIN NOTE ════════════════ -->
 <section style="padding-top: 2rem">
 <div class="container reveal">
   <div class="correction">
     <div class="correction-text">
-      <div class="eyebrow" style="color:var(--rose)">Correção crítica</div>
-      <h3><span class="badge-err">Erro</span>Cadeia trocada do RNAP</h3>
+      <div class="eyebrow" style="color:var(--indigo)">Nota metodológica</div>
+      <h3>Escolha da cadeia do RNAP (1HQM)</h3>
       <p>
-        O relatório original (<em>277.pplx.app</em> / biomni) usou <strong>1HQM cadeia B</strong> —
-        a subunidade <strong>α</strong> do RNA polimerase, com apenas 229 Cα e <strong>sem o domínio palm</strong>.
-        O palm PF00562, alvo da análise, está na subunidade <strong>β</strong> (cadeia C, 997 Cα).
+        O cristal 1HQM contém múltiplas subunidades do RNA polimerase de <em>T. aquaticus</em>.
+        A análise usa a <strong>cadeia C</strong> — subunidade <strong>β</strong> (997 Cα),
+        que contém o domínio palm PF00562, sítio catalítico da polimerização.
+        A cadeia B (subunidade α, 229 Cα) não possui este domínio.
       </p>
       <p style="margin-top:1rem">
-        Reanálise com a cadeia correta: TM-score sobe <strong>+30%</strong> (0.242 → 0.315),
-        o core universal passa de 1 para <strong>4 resíduos</strong>, e o RNAP atinge <strong>83.3%</strong> de cobertura
-        — ao invés dos resultados inválidos do relatório original.
+        Com a cadeia C: TM-score NTase↔RNAP = <strong>0.315</strong>,
+        cobertura do core = <strong>83.3%</strong> (40/48 resíduos), e
+        <strong>4 resíduos universais</strong> conservados em todos os 6 folds.
       </p>
     </div>
     <div class="chain-compare">
       <div class="chain-card bad">
-        <div class="label">✗ Relatório original</div>
+        <div class="label">Cadeia B — não utilizada</div>
         <div class="pdb">1HQM · cadeia B</div>
-        <div class="desc">Subunidade α · 229 Cα · sem palm</div>
+        <div class="desc">Subunidade α · 229 Cα · sem domínio palm</div>
       </div>
       <div class="chain-card good">
-        <div class="label">✓ Esta análise</div>
+        <div class="label">✓ Cadeia utilizada</div>
         <div class="pdb">1HQM · cadeia C</div>
         <div class="desc">Subunidade β · 997 Cα · palm PF00562</div>
       </div>
@@ -1081,6 +1184,34 @@ footer .footer-meta { margin-top: 0.5rem; color: var(--text-faint); font-size: 0
 </section>
 
 
+<!-- ════════════════ STRUCTURE VIEWER ════════════════ -->
+<section id="structures">
+<div class="container">
+  <div class="eyebrow">Visualizador estrutural</div>
+  <h2>Os 48 resíduos do core no <em>espaço 3D</em>.</h2>
+  <p class="section-lead">
+    Cada estrutura carregada diretamente do RCSB PDB. Para a referência (NTase 1VFG-A), os 48 resíduos do core
+    são destacados por tipo: <span style="color:var(--gold)">●</span> ASP catalíticos
+    · <span style="color:#f0f1f7">●</span> universais (6/6)
+    · <span style="color:var(--indigo)">●</span> presentes · <span style="color:var(--text-faint)">●</span> ausentes.
+    Para os demais folds, a estrutura é mostrada com o backbone colorido.
+  </p>
+  <div class="struct-card reveal">
+    <div class="struct-fold-bar" id="struct-fold-bar"></div>
+    <div class="struct-viewer-wrap">
+      <div id="struct-3dmol">
+        <div class="struct-loading" id="struct-loading">Clique em um fold para carregar a estrutura</div>
+      </div>
+      <div class="struct-info-panel" id="struct-info-panel">
+        <div style="color:var(--text-mute);font-family:var(--ff-mono);font-size:0.8rem;margin:auto;text-align:center">
+          Selecione um fold<br>no painel à esquerda
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
 <!-- ════════════════ METHODS ════════════════ -->
 <section id="methods">
 <div class="container">
@@ -1134,8 +1265,7 @@ footer .footer-meta { margin-top: 0.5rem; color: var(--text-faint); font-size: 0
       <span class="gradient">de EC 2.7.7.*.</span>
     </h1>
     <p class="hero-sub">
-      Substituindo a árvore ML global do relatório <em>277.pplx.app</em> (dominada pelo sinal NTase β-palm)
-      por árvores por família Pfam, cada uma enraizada com um representante de cada outra família.
+      Árvores de máxima verossimilhança por família Pfam, cada uma enraizada com um representante de cada outra família como outgroup — resolução filogenética intra-família sem o viés de alinhamento global.
     </p>
     <div class="hero-meta">
       <div class="item"><span class="label">Fonte</span><span class="value">UniProt Swiss-Prot (reviewed:true)</span></div>
@@ -1150,12 +1280,11 @@ footer .footer-meta { margin-top: 0.5rem; color: var(--text-faint); font-size: 0
 <section id="phylogeny">
 <div class="container">
   <div class="eyebrow">Análise filogenética</div>
-  <h2>Per-Pfam ML trees — não <em>uma árvore global</em>.</h2>
+  <h2>Uma árvore ML por família Pfam — <em>não um alinhamento global</em>.</h2>
   <p class="section-lead">
-    Refazendo a árvore do relatório <em>277.pplx.app</em> / biomni: em vez de uma única árvore ML
-    sobre 352 sequências alinhadas globalmente (dominada pelo sinal NTase β-palm),
-    separamos as 13.886 sequências Swiss-Prot com EC 2.7.7.* em <strong>88 famílias Pfam</strong> e
-    construímos uma árvore para cada uma das <strong>56 famílias com ≥ 30 membros</strong>,
+    Um alinhamento global das 13.886 sequências EC 2.7.7.* seria dominado pelo sinal da família mais abundante.
+    Em vez disso, separamos as sequências Swiss-Prot em <strong>88 famílias Pfam</strong> e
+    construímos uma árvore independente para cada uma das <strong>56 famílias com ≥ 30 membros</strong>,
     enraizada com 1 representante de cada outra família como outgroup.
   </p>
 
@@ -1192,7 +1321,7 @@ footer .footer-meta { margin-top: 0.5rem; color: var(--text-faint); font-size: 0
       <div class="method-card">
         <div class="icon">02</div>
         <h4>Mapeamento Pfam</h4>
-        <p>Cada proteína atribuída ao Pfam globalmente mais abundante em sua anotação → <strong style="color:var(--text)">88 famílias</strong> automáticas (vs 16 manuais do relatório original).</p>
+        <p>Cada proteína atribuída ao Pfam globalmente mais abundante em sua anotação (xref_pfam do UniProt) → <strong style="color:var(--text)">88 famílias</strong> derivadas automaticamente e auditáveis via InterPro.</p>
       </div>
       <div class="method-card">
         <div class="icon">03</div>
@@ -2251,6 +2380,176 @@ async function setupPhylo() {
 }
 
 /* ════════════════════════════════════════════════════════
+   STRUCTURE VIEWER — 3Dmol.js
+   ════════════════════════════════════════════════════════ */
+// Core residue numbers in 1VFG-A numbering (from CORE data)
+const CORE_RESNUMS    = CORE.map(r => r.resnum);
+const CORE_CATALYTIC  = CORE.filter(r => r.catalytic).map(r => r.resnum);  // [22,33]
+const CORE_UNIVERSAL  = CORE.filter(r => r.universal).map(r => r.resnum);  // [34,35,197,199]
+
+// Absent residues per fold (from PRESENCE data)
+const ABSENT_BY_FOLD  = {};
+PRESENCE.forEach(p => { ABSENT_BY_FOLD[p.fold] = new Set(p.absent); });
+
+let mol3dViewer   = null;
+let mol3dLoaded   = false;
+let structCurrentFold = null;
+
+function load3DmolScript(cb) {
+  if (window.$3Dmol) { cb(); return; }
+  const s    = document.createElement('script');
+  s.src      = 'https://3Dmol.org/build/3Dmol-min.js';
+  s.onload   = cb;
+  s.onerror  = () => {
+    document.getElementById('struct-loading').textContent = '3Dmol.js não pôde ser carregado (sem conexão?).';
+  };
+  document.head.appendChild(s);
+}
+
+function initMolViewer() {
+  const el = document.getElementById('struct-3dmol');
+  if (!el || !window.$3Dmol) return;
+  mol3dViewer = $3Dmol.createViewer(el, {
+    backgroundColor: 0x07070c,
+    antialias: true,
+  });
+  mol3dLoaded = true;
+}
+
+function loadFoldStructure(fold) {
+  if (!mol3dLoaded) return;
+  const s = FOLD_META[fold];
+  if (!s) return;
+  structCurrentFold = fold;
+
+  const loading = document.getElementById('struct-loading');
+  loading.style.display = 'flex';
+  loading.textContent   = `Carregando ${s.pdb}…`;
+
+  const color    = FOLD_COLORS[fold];
+  const [pdbId, chain] = s.pdb.split('-');
+  const absent   = ABSENT_BY_FOLD[fold] || new Set();
+
+  mol3dViewer.clear();
+
+  $3Dmol.download(`pdb:${pdbId}`, mol3dViewer, { multimodel: false }, function() {
+    loading.style.display = 'none';
+
+    // ── backbone — dim cartoon ──────────────────────────────────
+    mol3dViewer.setStyle({ chain }, { cartoon: { color: '#1e1e35', opacity: 0.55 } });
+
+    if (fold === 'NTase') {
+      // ── reference: highlight each core residue ──────────────────
+      // 1. All present core residues (fold color, spheres)
+      const present = CORE_RESNUMS.filter(r => !absent.has(r)
+                        && !CORE_CATALYTIC.includes(r) && !CORE_UNIVERSAL.includes(r));
+      if (present.length)
+        mol3dViewer.setStyle({ chain, resi: present },
+          { cartoon: { color, opacity: 0.7 },
+            sphere:  { color, radius: 0.45, opacity: 0.9 } });
+      // 2. Universal (white)
+      if (CORE_UNIVERSAL.length)
+        mol3dViewer.setStyle({ chain, resi: CORE_UNIVERSAL },
+          { cartoon: { color: '#f0f1f7', opacity: 0.9 },
+            sphere:  { color: '#f0f1f7', radius: 0.55, opacity: 1 } });
+      // 3. Catalytic ASP (gold)
+      if (CORE_CATALYTIC.length)
+        mol3dViewer.setStyle({ chain, resi: CORE_CATALYTIC },
+          { cartoon: { color: '#f5c518', opacity: 1 },
+            sphere:  { color: '#f5c518', radius: 0.65, opacity: 1 },
+            stick:   { colorscheme: 'yellowCarbon', radius: 0.15 } });
+
+      mol3dViewer.zoomTo({ chain, resi: CORE_RESNUMS });
+    } else {
+      // ── other folds: show backbone with fold color ──────────────
+      mol3dViewer.setStyle({ chain }, {
+        cartoon: { color, opacity: 0.85 }
+      });
+      mol3dViewer.zoomTo({ chain });
+    }
+
+    mol3dViewer.render();
+    updateStructInfoPanel(fold, pdbId, chain);
+  });
+}
+
+function updateStructInfoPanel(fold, pdbId, chain) {
+  const panel   = document.getElementById('struct-info-panel');
+  const p       = PRESENCE.find(x => x.fold === fold);
+  const m       = FOLD_META[fold];
+  const color   = FOLD_COLORS[fold];
+  const pct     = p ? p.pct : 100;
+  const present = p ? p.present : 48;
+  const status  = m.ref ? 'Referência' : pct >= 70 ? 'Presente' : 'Parcial';
+
+  panel.innerHTML = `
+    <div>
+      <div class="fold-name" style="color:${color}">${fold}</div>
+      <div class="pdb-code">${m.pdb} · ${m.desc}</div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;font-family:var(--ff-mono);font-size:0.78rem;margin-bottom:0.4rem">
+        <span style="color:var(--text-mute)">Cobertura do core</span>
+        <span style="color:${color};font-weight:600">${pct.toFixed(1)}%</span>
+      </div>
+      <div class="struct-coverage-bar">
+        <div class="struct-coverage-fill" style="width:${pct}%;background:${color}"></div>
+      </div>
+      <div style="font-family:var(--ff-mono);font-size:0.72rem;color:var(--text-mute);margin-top:0.4rem">
+        ${present} / 48 resíduos · ${status}
+      </div>
+    </div>
+    ${p && p.absent.length ? `
+    <div>
+      <div style="font-family:var(--ff-mono);font-size:0.68rem;color:var(--text-faint);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem">Ausentes no core</div>
+      <div style="font-family:var(--ff-mono);font-size:0.72rem;color:var(--text-mute);line-height:1.8">
+        ${p.absent.map(r => `<span style="background:var(--bg-3);padding:0.1rem 0.35rem;border-radius:3px;margin:0.1rem;display:inline-block">${r}</span>`).join('')}
+      </div>
+    </div>` : ''}
+    <div class="struct-legend">
+      ${fold === 'NTase' ? `
+        <div class="struct-legend-item"><div class="struct-swatch" style="background:#f5c518"></div>ASP catalítico (Asp22 · Asp33)</div>
+        <div class="struct-legend-item"><div class="struct-swatch" style="background:#f0f1f7"></div>Universal 6/6 folds</div>
+        <div class="struct-legend-item"><div class="struct-swatch" style="background:${color}"></div>Core presente</div>
+        <div class="struct-legend-item"><div class="struct-swatch" style="background:#1e1e35;border:1px solid var(--border)"></div>Backbone (fora do core)</div>
+      ` : `
+        <div class="struct-legend-item"><div class="struct-swatch" style="background:${color}"></div>Backbone (${fold})</div>
+        <div style="color:var(--text-faint);font-size:0.68rem">Mapeamento de resíduos individuais disponível apenas para a referência 1VFG-A (NTase).</div>
+      `}
+      <a href="https://www.rcsb.org/structure/${pdbId}" target="_blank" rel="noopener"
+        style="color:var(--indigo);text-decoration:none;font-size:0.72rem;margin-top:0.2rem">
+        RCSB ${pdbId} ↗
+      </a>
+    </div>
+  `;
+}
+
+function setupStructViewer() {
+  const bar = document.getElementById('struct-fold-bar');
+  if (!bar) return;
+
+  FOLDS_ORDER.forEach(fold => {
+    const btn = document.createElement('button');
+    btn.className   = 'struct-fold-btn';
+    btn.textContent = fold;
+    btn.dataset.fold = fold;
+    btn.style.setProperty('--fold-c', FOLD_COLORS[fold]);
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.struct-fold-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      btn.style.background = FOLD_COLORS[fold];
+      btn.style.color      = '#07070c';
+
+      load3DmolScript(() => {
+        if (!mol3dLoaded) initMolViewer();
+        loadFoldStructure(fold);
+      });
+    });
+    bar.appendChild(btn);
+  });
+}
+
+/* ════════════════════════════════════════════════════════
    INIT
    ════════════════════════════════════════════════════════ */
 window.addEventListener('DOMContentLoaded', () => {
@@ -2261,6 +2560,7 @@ window.addEventListener('DOMContentLoaded', () => {
   buildTMChart();
   setupReveal();
   setupPhylo();
+  setupStructViewer();
 });
 
 let resizeTO;
