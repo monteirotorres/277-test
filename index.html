@@ -159,16 +159,65 @@ nav {
   background: var(--gold);
   box-shadow: 0 0 12px rgba(245,197,24,0.6);
 }
-.nav-links { display: flex; gap: 1.6rem; }
-.nav-links a {
-  font-size: 0.82rem;
-  color: var(--text-mute);
-  text-decoration: none;
-  transition: color 0.2s;
-  font-weight: 500;
+.nav-tabs {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
 }
-.nav-links a:hover { color: var(--text); }
-@media (max-width: 720px) { .nav-links { display: none; } }
+.nav-tab {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-mute);
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  font-family: var(--ff-sans);
+  text-align: left;
+}
+.nav-tab .t1 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+.nav-tab .t2 {
+  font-family: var(--ff-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+}
+.nav-tab:hover {
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
+}
+.nav-tab.active {
+  background: var(--bg-2);
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+.nav-tab.active .t2 { color: var(--indigo); }
+.nav-gh {
+  color: var(--text-mute);
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.6rem;
+  border-radius: var(--radius);
+  margin-left: 0.4rem;
+  transition: color 0.2s, background 0.2s;
+}
+.nav-gh:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+@media (max-width: 720px) {
+  .nav-tab .t2 { display: none; }
+  .nav-tab { padding: 0.4rem 0.7rem; }
+}
+
+/* Tab content panels */
+.tab-content { display: none; }
+.tab-content.active { display: block; }
 
 /* ─────────────────────────────────────────────────────────
    HERO
@@ -736,7 +785,10 @@ table.compare td:first-child { color: var(--text); font-weight: 500; }
   border: 1px solid var(--border);
 }
 .phylo-tree-wrap svg { display: block; }
-.phylo-tree-wrap .leaf-label { font-family: var(--ff-mono); font-size: 9px; cursor: pointer; }
+.phylo-tree-wrap .leaf-label { font-family: var(--ff-mono); font-size: 9px; cursor: pointer; transition: fill 0.15s; }
+.phylo-tree-wrap a { text-decoration: none; }
+.link-acc { color: var(--indigo); text-decoration: none; font-family: var(--ff-mono); transition: color 0.15s; }
+.link-acc:hover { color: var(--gold); }
 .phylo-tree-wrap .leaf-label.focal { fill: #d4dcf5; }
 .phylo-tree-wrap .leaf-label.outgroup { fill: #f06292; opacity: 0.85; }
 .phylo-tree-wrap .leaf-label:hover { fill: #fff; }
@@ -807,16 +859,24 @@ footer .footer-meta { margin-top: 0.5rem; color: var(--text-faint); font-size: 0
       <div class="dot"></div>
       <span>core.monttinen</span>
     </div>
-    <div class="nav-links">
-      <a href="#findings">Resultados</a>
-      <a href="#coverage">Folds</a>
-      <a href="#sec-heatmap">Mapa</a>
-      <a href="#table">Contestação</a>
-      <a href="#methods">Métodos</a>
-      <a href="#phylogeny">Filogenia</a>
+    <div class="nav-tabs" role="tablist">
+      <button class="nav-tab" data-tab="structural" role="tab">
+        <span class="t1">Core estrutural</span>
+        <span class="t2">Mönttinen · TM-align · 7 estruturas</span>
+      </button>
+      <button class="nav-tab" data-tab="phylogeny" role="tab">
+        <span class="t1">Filogenia</span>
+        <span class="t2">88 Pfams · 56 árvores ML</span>
+      </button>
+      <a class="nav-gh" href="https://github.com/monteirotorres/277-test" target="_blank" rel="noopener" aria-label="GitHub repo">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      </a>
     </div>
   </div>
 </nav>
+
+<!-- ════════════════ TAB: STRUCTURAL ════════════════ -->
+<div class="tab-content active" data-tab="structural">
 
 <!-- ════════════════ HERO ════════════════ -->
 <header class="hero">
@@ -1108,6 +1168,37 @@ footer .footer-meta { margin-top: 0.5rem; color: var(--text-faint); font-size: 0
 </div>
 </section>
 
+</div><!-- /tab-content: structural -->
+
+<!-- ════════════════ TAB: PHYLOGENY ════════════════ -->
+<div class="tab-content" data-tab="phylogeny">
+
+<!-- Phylogeny hero -->
+<header class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-tag">
+      <div class="pulse"></div>
+      <span>UniProt Swiss-Prot · 13.886 entradas · 56 árvores ML</span>
+    </div>
+    <h1>
+      <span class="gradient">Per-Pfam ML trees</span><br>
+      <em>56 árvores</em><span class="gradient">,<br>uma para cada família</span><br>
+      <span class="gradient">de EC 2.7.7.*.</span>
+    </h1>
+    <p class="hero-sub">
+      Substituindo a árvore ML global do relatório <em>277.pplx.app</em> (dominada pelo sinal NTase β-palm)
+      por árvores por família Pfam, cada uma enraizada com um representante de cada outra família.
+    </p>
+    <div class="hero-meta">
+      <div class="item"><span class="label">Fonte</span><span class="value">UniProt Swiss-Prot (reviewed:true)</span></div>
+      <div class="item"><span class="label">Famílias</span><span class="value">88 Pfam · 56 com ≥ 30 membros</span></div>
+      <div class="item"><span class="label">Software</span><span class="value">MAFFT · trimAl · IQ-TREE / FastTree</span></div>
+      <div class="item"><span class="label">Suporte</span><span class="value">UFBoot 1000 / SH-aLRT</span></div>
+    </div>
+  </div>
+</header>
+
 <!-- ════════════════ PHYLOGENY ════════════════ -->
 <section id="phylogeny">
 <div class="container">
@@ -1194,6 +1285,8 @@ footer .footer-meta { margin-top: 0.5rem; color: var(--text-faint); font-size: 0
   </div>
 </div>
 </section>
+
+</div><!-- /tab-content: phylogeny -->
 
 <footer>
   <div>Pedro Torres · LMDM / UFRJ · 17 mai 2026</div>
@@ -1679,6 +1772,34 @@ function setupReveal() {
 }
 
 /* ════════════════════════════════════════════════════════
+   TABS
+   ════════════════════════════════════════════════════════ */
+function setupTabs() {
+  const buttons = document.querySelectorAll('.nav-tab');
+  const panels = document.querySelectorAll('.tab-content');
+  function activate(tab, push) {
+    buttons.forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+    panels.forEach(p => p.classList.toggle('active', p.dataset.tab === tab));
+    if (push) history.replaceState(null, '', '#' + tab);
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    // Re-render width-dependent SVGs when made visible
+    if (tab === 'structural') {
+      buildSeqStrip();
+      buildTMChart();
+    }
+  }
+  buttons.forEach(b => b.addEventListener('click', () => activate(b.dataset.tab, true)));
+  // Initial state from hash
+  const hash = (location.hash || '').replace('#', '');
+  const initial = ['structural','phylogeny'].includes(hash) ? hash : 'structural';
+  activate(initial, false);
+  window.addEventListener('hashchange', () => {
+    const h = (location.hash || '').replace('#', '');
+    if (['structural','phylogeny'].includes(h)) activate(h, false);
+  });
+}
+
+/* ════════════════════════════════════════════════════════
    PHYLOGENY — Newick parser + rectangular tree renderer
    ════════════════════════════════════════════════════════ */
 function parseNewick(s) {
@@ -1797,21 +1918,22 @@ function renderTree(svg, root, opts) {
   }
   drawBranches(root, null);
 
-  // Draw leaf labels
+  // Draw leaf labels (clickable → UniProt)
   for (const leaf of leaves) {
     const x = xScale(leaf.depth);
     const y = yScale(leaf.y);
     const name = leaf.name || '';
     const isOG = name.startsWith('OG_');
     let display = name;
-    let title = name;
+    let acc = name;
     if (isOG) {
-      // OG_PFxxxxx_ACC → show only PFxxxxx · ACC
       const m = name.match(/^OG_(PF\d+)_(.+)$/);
-      if (m) display = `${m[1]} · ${m[2]}`;
+      if (m) { display = `${m[1]} · ${m[2]}`; acc = m[2]; }
     }
-    parts.push(`<text class="leaf-label ${isOG ? 'outgroup' : 'focal'}"
-      x="${x + 4}" y="${y + leafFont * 0.35}">${display}</text>`);
+    const safeAcc = acc.replace(/[^A-Za-z0-9_]/g, '');
+    const url = `https://www.uniprot.org/uniprotkb/${safeAcc}/entry`;
+    parts.push(`<a href="${url}" target="_blank" rel="noopener"><text class="leaf-label ${isOG ? 'outgroup' : 'focal'}"
+      x="${x + 4}" y="${y + leafFont * 0.35}"><title>${name} — abrir no UniProt</title>${display}</text></a>`);
   }
 
   // Scale bar
@@ -1881,8 +2003,9 @@ async function setupPhylo() {
     const sup = t.support;
     const supS = sup == null ? '—' : (t.support_type === 'UFB%' ? `${sup.toFixed(0)}%` : sup.toFixed(2));
     const supCls = supportClass(sup, t.support_type);
+    const interproUrl = `https://www.ebi.ac.uk/interpro/entry/pfam/${t.pf}/`;
     stats.innerHTML = `
-      <div class="stat-item"><div class="lbl">Pfam</div><div class="val">${t.pf}</div></div>
+      <div class="stat-item"><div class="lbl">Pfam</div><div class="val"><a href="${interproUrl}" target="_blank" rel="noopener" class="link-acc">${t.pf} ↗</a></div></div>
       <div class="stat-item"><div class="lbl">Total no dataset</div><div class="val">${t.count_total}</div></div>
       <div class="stat-item"><div class="lbl">Táxons na árvore</div><div class="val">${t.n_taxa}</div></div>
       <div class="stat-item"><div class="lbl">Sites (trim)</div><div class="val">${t.n_sites || '—'}</div></div>
@@ -1910,6 +2033,7 @@ async function setupPhylo() {
    INIT
    ════════════════════════════════════════════════════════ */
 window.addEventListener('DOMContentLoaded', () => {
+  setupTabs();
   buildFoldCards();
   buildHeatmap();
   buildSeqStrip();
