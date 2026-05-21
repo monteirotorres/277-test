@@ -734,6 +734,28 @@ h1 .gradient {
 .phylo-stats .stat-item .val.ok { color: var(--emerald); }
 .phylo-stats .stat-item .val.mid { color: var(--gold); }
 .phylo-stats .stat-item .val.low { color: var(--rose); }
+.phylo-view-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.view-btn {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  color: var(--text-mute);
+  font-family: var(--ff-mono);
+  font-size: 0.78rem;
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.view-btn.active {
+  border-color: var(--border-strong);
+  color: var(--text);
+  background: var(--bg-3);
+}
+.view-btn:hover { color: var(--text); }
 .phylo-tree-wrap {
   background: rgba(0,0,0,0.25);
   border-radius: var(--radius);
@@ -743,6 +765,42 @@ h1 .gradient {
   border: 1px solid var(--border);
 }
 .phylo-tree-wrap svg { display: block; }
+.phylo-aln-wrap {
+  background: rgba(0,0,0,0.25);
+  border-radius: var(--radius);
+  padding: 1rem;
+  overflow: auto;
+  max-height: 760px;
+  border: 1px solid var(--border);
+  display: none;
+}
+.aln-export-note {
+  font-family: var(--ff-mono);
+  font-size: 0.78rem;
+  color: var(--text-mute);
+  padding: 1rem;
+  line-height: 1.7;
+}
+.aln-export-note code {
+  background: var(--bg-2);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  color: var(--emerald);
+  font-size: 0.85em;
+}
+.aln-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.68rem;
+  font-family: var(--ff-mono);
+  color: var(--text-mute);
+}
+.aln-legend-item { display: flex; align-items: center; gap: 0.35rem; }
+.aln-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
 .phylo-tree-wrap .leaf-label { font-family: var(--ff-mono); font-size: 9px; cursor: pointer; transition: fill 0.15s; }
 .phylo-tree-wrap a { text-decoration: none; }
 .link-acc { color: var(--indigo); text-decoration: none; font-family: var(--ff-mono); transition: color 0.15s; }
@@ -1162,8 +1220,15 @@ footer .footer-meta { margin-top: 0.5rem; color: var(--text-faint); font-size: 0
         <select id="phylo-select"></select>
       </div>
     </div>
-    <div class="phylo-tree-wrap">
+    <div class="phylo-view-toggle">
+      <button class="view-btn active" data-view="tree">🌿 Árvore</button>
+      <button class="view-btn" data-view="alignment">≡ Alinhamento</button>
+    </div>
+    <div class="phylo-tree-wrap" id="phylo-tree-panel">
       <svg id="phylo-tree"></svg>
+    </div>
+    <div class="phylo-aln-wrap" id="phylo-aln-panel">
+      <div id="phylo-aln"></div>
     </div>
     <div class="phylo-legend">
       <span class="legend-item"><div class="legend-sw" style="background:#d4dcf5"></div>Sequência focal (família) → UniProt</span>
@@ -1690,6 +1755,148 @@ function setupTabs() {
 }
 
 /* ════════════════════════════════════════════════════════
+   ALIGNMENT — FASTA viewer
+   ════════════════════════════════════════════════════════ */
+const AA_COLORS = {
+  // hydrophobic — orange
+  A:'#f97316',V:'#f97316',I:'#f97316',L:'#f97316',M:'#f97316',F:'#ea580c',W:'#c2410c',
+  // polar — teal/green
+  S:'#22c55e',T:'#16a34a',N:'#4ade80',Q:'#86efac',Y:'#34d399',
+  // positive — blue/indigo
+  K:'#60a5fa',R:'#3b82f6',H:'#818cf8',
+  // negative — red
+  D:'#f87171',E:'#ef4444',
+  // special
+  C:'#f5c518',G:'#a855f7',P:'#c084fc',
+  // gap
+  '-':'#1a1a2e','.':'#1a1a2e','X':'#454c70'
+};
+
+function parseFasta(text) {
+  const seqs = [];
+  let cur = null;
+  for (const line of text.split('\n')) {
+    const t = line.trim();
+    if (t.startsWith('>')) {
+      cur = { name: t.slice(1).split(/\s+/)[0], seq: '' };
+      seqs.push(cur);
+    } else if (cur) {
+      cur.seq += t.toUpperCase();
+    }
+  }
+  return seqs;
+}
+
+function renderAlignment(seqs, container) {
+  container.innerHTML = '';
+  if (!seqs || !seqs.length) {
+    container.innerHTML = '<div class="aln-export-note">Nenhuma sequência carregada.</div>';
+    return;
+  }
+
+  const MAX_SEQS  = 100;
+  const charW     = 7, charH = 10, nameW = 160, padTop = 4;
+  const shown     = seqs.slice(0, MAX_SEQS);
+  const nCols     = Math.max(...shown.map(s => s.seq.length));
+
+  // Conservation bar height
+  const consvH = 18;
+  const H = padTop + consvH + shown.length * charH + 24;
+  const W = nameW + nCols * charW + 20;
+
+  const canvas = document.createElement('canvas');
+  canvas.width  = W;
+  canvas.height = H;
+  canvas.style.cssText = 'display:block; cursor:crosshair;';
+  const ctx = canvas.getContext('2d');
+
+  ctx.fillStyle = '#07070c';
+  ctx.fillRect(0, 0, W, H);
+
+  // ── Conservation bar ─────────────────────────────────
+  for (let col = 0; col < nCols; col++) {
+    const chars = shown.map(s => s.seq[col] || '-').filter(c => c !== '-' && c !== '.');
+    const freq  = {};
+    chars.forEach(c => { freq[c] = (freq[c] || 0) + 1; });
+    const maxF  = Math.max(0, ...Object.values(freq));
+    const cons  = chars.length ? maxF / chars.length : 0;
+    const x     = nameW + col * charW;
+    // Height proportional to conservation
+    const bh    = Math.round(cons * consvH);
+    ctx.fillStyle = `rgba(245,197,24,${cons * 0.85})`;
+    ctx.fillRect(x, padTop + consvH - bh, charW - 1, bh);
+  }
+
+  // ── Sequences ────────────────────────────────────────
+  ctx.font = `${charH - 1}px "JetBrains Mono", monospace`;
+  shown.forEach((s, row) => {
+    const y    = padTop + consvH + row * charH;
+    const isOG = s.name.startsWith('OG_');
+    // Name
+    ctx.fillStyle = isOG ? 'rgba(240,98,146,0.8)' : 'rgba(212,220,245,0.85)';
+    ctx.fillText(s.name.slice(0, 22), 2, y + charH - 2);
+    // Residues
+    for (let col = 0; col < s.seq.length; col++) {
+      const aa = s.seq[col];
+      const x  = nameW + col * charW;
+      ctx.fillStyle = (AA_COLORS[aa] || '#454c70') + 'b0';
+      ctx.fillRect(x, y, charW - 1, charH - 1);
+    }
+  });
+
+  // ── Hover tooltip ────────────────────────────────────
+  const tip2 = document.getElementById('tooltip');
+  canvas.addEventListener('mousemove', e => {
+    const rect  = canvas.getBoundingClientRect();
+    const mx    = e.clientX - rect.left;
+    const my    = e.clientY - rect.top;
+    const col   = Math.floor((mx - nameW) / charW);
+    const row   = Math.floor((my - padTop - consvH) / charH);
+    if (col >= 0 && col < nCols && row >= 0 && row < shown.length) {
+      const s   = shown[row];
+      const aa  = s.seq[col] || '-';
+      tip2.innerHTML = `<div class="tt-title">Col ${col + 1} · ${aa}</div><div class="tt-meta">${s.name}</div>`;
+      tip2.style.display = 'block';
+    } else {
+      tip2.style.display = 'none';
+    }
+  });
+  canvas.addEventListener('mouseleave', () => { tip2.style.display = 'none'; });
+
+  container.appendChild(canvas);
+
+  // Legend + note
+  const legend = document.createElement('div');
+  legend.className = 'aln-legend';
+  legend.innerHTML = [
+    ['#f97316','Hidrofóbico (AVILMFW)'],
+    ['#22c55e','Polar (STNQY)'],
+    ['#3b82f6','+ (KRH)'],
+    ['#ef4444','– (DE)'],
+    ['#f5c518','Cys / Gly / Pro'],
+    ['rgba(245,197,24,0.6)','Barra conservação'],
+  ].map(([c,l]) => `<span class="aln-legend-item"><span class="aln-swatch" style="background:${c}"></span>${l}</span>`).join('');
+  container.appendChild(legend);
+
+  if (seqs.length > MAX_SEQS) {
+    const note = document.createElement('div');
+    note.className = 'aln-export-note';
+    note.style.borderTop = '1px solid var(--border)';
+    note.style.marginTop = '0.5rem';
+    note.textContent = `Mostrando ${MAX_SEQS} de ${seqs.length} sequências (ordenadas por familía).`;
+    container.appendChild(note);
+  }
+}
+
+async function loadAlignment(pf) {
+  try {
+    const r = await fetch(`trees/${pf}.aln`);
+    if (!r.ok) throw new Error(r.status);
+    return parseFasta(await r.text());
+  } catch (_) { return null; }
+}
+
+/* ════════════════════════════════════════════════════════
    PHYLOGENY — Newick parser + rectangular tree renderer
    ════════════════════════════════════════════════════════ */
 function parseNewick(s) {
@@ -1732,6 +1939,65 @@ function parseNewick(s) {
   return root;
 }
 
+/* Re-root unrooted tree so focal sequences form a clean clade.
+   Algorithm: find the focal MRCA (smallest subtree containing all
+   focal leaves), then reverse the path to make it the new root.     */
+function outgroupRoot(root) {
+  // ── 1. annotate: count focal leaves per subtree ──────────────────
+  function annotate(n) {
+    if (!n.children.length) {
+      n._f = (n.name && !n.name.startsWith('OG_')) ? 1 : 0;
+    } else {
+      n.children.forEach(annotate);
+      n._f = n.children.reduce((s, c) => s + c._f, 0);
+    }
+  }
+  annotate(root);
+  const totalF = root._f;
+  if (!totalF) return root;
+
+  // ── 2. find focal MRCA: subtree with all focal, fewest leaves ────
+  let mrca = root, mrcaLeaves = Infinity;
+  (function search(n) {
+    if (n._f === totalF) {
+      let sz = 0;
+      (function cnt(x) { sz += x.children.length === 0 ? 1 : 0; x.children.forEach(cnt); })(n);
+      if (sz < mrcaLeaves) { mrcaLeaves = sz; mrca = n; }
+    }
+    n.children.forEach(search);
+  })(root);
+
+  if (mrca === root) return root; // already rooted at focal MRCA
+
+  // ── 3. add parent pointers ───────────────────────────────────────
+  (function setP(n, p) { n._par = p; n.children.forEach(c => setP(c, n)); })(root, null);
+
+  // ── 4. reverse edges along path mrca → root ──────────────────────
+  const path = [];
+  for (let c = mrca; c; c = c._par) path.push(c);
+  // path[0]=mrca, path[last]=old root
+
+  for (let i = path.length - 1; i > 0; i--) {
+    const par = path[i];
+    const kid = path[i - 1];
+    par.children = par.children.filter(x => x !== kid);
+    kid.children.push(par);
+    par.length = kid.length || 0;
+  }
+  mrca.length = 0;
+  mrca._par  = null;
+
+  // ── 5. put focal-heavy children first in every node ──────────────
+  (function sort(n) {
+    if (n.children.length) {
+      n.children.sort((a, b) => b._f - a._f);
+      n.children.forEach(sort);
+    }
+  })(mrca);
+
+  return mrca;
+}
+
 function layoutTree(root) {
   // Assign y to leaves equally, then propagate; assign x by cumulative branch length.
   const leaves = [];
@@ -1762,6 +2028,7 @@ function layoutTree(root) {
 }
 
 function renderTree(svg, root, opts) {
+  root = outgroupRoot(root);   // re-root: focal MRCA becomes the tree root
   opts = opts || {};
   const leafFont = 9;
   const leafGap = 13;
@@ -1930,9 +2197,55 @@ async function setupPhylo() {
     renderTree(svg, root);
   }
 
-  select.addEventListener('change', e => show(e.target.value));
-  // Default to PF00562 (RNAP β-palm) if present, else first
+  // ── Alignment loading ─────────────────────────────────────────────
+  const alnPanel  = document.getElementById('phylo-aln-panel');
+  const alnDiv    = document.getElementById('phylo-aln');
+  const treePanel = document.getElementById('phylo-tree-panel');
+  let currentPf   = null;
+  let currentView = 'tree'; // 'tree' | 'alignment'
+
+  async function showAlignment(pf) {
+    alnDiv.innerHTML = '<div class="aln-export-note">Carregando alinhamento…</div>';
+    const seqs = await loadAlignment(pf);
+    if (!seqs) {
+      alnDiv.innerHTML = `<div class="aln-export-note">
+        Arquivo <code>trees/${pf}.aln</code> não encontrado.<br><br>
+        Para incluir alinhamentos, adicione ao seu script de exportação:<br>
+        <code>cp $src/trees/${pf}/combined.trim $dst/${pf}.aln</code><br><br>
+        Ou adicione para todas as famílias:<br>
+        <code>for d in $src/trees/*/; do pf=$(basename $d); [ -f "$d/combined.trim" ] && cp "$d/combined.trim" "$dst/$pf.aln"; done</code>
+      </div>`;
+      return;
+    }
+    renderAlignment(seqs, alnDiv);
+  }
+
+  // ── View toggle ───────────────────────────────────────────────────
+  document.querySelectorAll('.view-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      currentView = btn.dataset.view;
+      document.querySelectorAll('.view-btn').forEach(b => b.classList.toggle('active', b === btn));
+      if (currentView === 'tree') {
+        treePanel.style.display = '';
+        alnPanel.style.display  = 'none';
+      } else {
+        treePanel.style.display = 'none';
+        alnPanel.style.display  = '';
+        if (currentPf) await showAlignment(currentPf);
+      }
+    });
+  });
+
+  // ── Select change ─────────────────────────────────────────────────
+  select.addEventListener('change', async e => {
+    currentPf = e.target.value;
+    if (currentView === 'tree') show(currentPf);
+    else await showAlignment(currentPf);
+  });
+
+  // Default
   const defaultPf = manifest.trees.find(t => t.pf === 'PF00562') ? 'PF00562' : manifest.trees[0].pf;
+  currentPf = defaultPf;
   select.value = defaultPf;
   show(defaultPf);
 }
