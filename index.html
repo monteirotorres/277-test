@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Core estrutural de Mönttinen — análise TM-align</title>
+<title>Polimerases (2.7.7.X)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
@@ -591,46 +591,6 @@ h1 .gradient {
   border: 1px solid var(--border);
 }
 
-/* ─────────────────────────────────────────────────────────
-   COMPARISON TABLE
-   ───────────────────────────────────────────────────────── */
-.compare-card {
-  background: var(--bg-glass);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  backdrop-filter: blur(10px);
-}
-table.compare {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-}
-table.compare thead th {
-  background: rgba(255,255,255,0.025);
-  color: var(--text-mute);
-  font-weight: 600;
-  font-family: var(--ff-mono);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.68rem;
-  text-align: left;
-  padding: 1rem 1.4rem;
-  border-bottom: 1px solid var(--border);
-}
-table.compare td {
-  padding: 1rem 1.4rem;
-  border-bottom: 1px solid var(--border);
-  vertical-align: middle;
-  color: var(--text-dim);
-}
-table.compare tr:last-child td { border-bottom: none; }
-table.compare tr:hover td { background: rgba(255,255,255,0.02); }
-table.compare td:first-child { color: var(--text); font-weight: 500; }
-.v-old { color: var(--text-faint); text-decoration: line-through; font-family: var(--ff-mono); font-size: 0.85rem; }
-.v-new { color: var(--emerald); font-weight: 600; font-family: var(--ff-mono); font-size: 0.85rem; }
-.v-err { color: var(--rose); font-weight: 600; font-family: var(--ff-mono); font-size: 0.85rem; }
-.v-cause { font-size: 0.78rem; color: var(--text-mute); }
 
 /* ─────────────────────────────────────────────────────────
    METHODS
@@ -726,11 +686,9 @@ table.compare td:first-child { color: var(--text); font-weight: 500; }
 }
 .phylo-explorer-header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 1.5rem;
+  flex-direction: column;
+  gap: 1rem;
   margin-bottom: 1.5rem;
-  flex-wrap: wrap;
 }
 .phylo-label {
   display: block;
@@ -857,7 +815,7 @@ footer .footer-meta { margin-top: 0.5rem; color: var(--text-faint); font-size: 0
   <div class="nav-inner">
     <div class="nav-brand">
       <div class="dot"></div>
-      <span>core.monttinen</span>
+      <span>pol.2.7.7</span>
     </div>
     <div class="nav-tabs" role="tablist">
       <button class="nav-tab" data-tab="structural" role="tab">
@@ -892,7 +850,7 @@ footer .footer-meta { margin-top: 0.5rem; color: var(--text-faint); font-size: 0
       <span class="gradient">famílias de polimerases.</span>
     </h1>
     <p class="hero-sub reveal in">
-      Detecção local do motivo conservado de Mönttinen <em>et al.</em> (2016) nas polimerases de ácido nucleico (EC 2.7.7.*),
+      Detecção local do motivo conservado de <a href="https://doi.org/10.1093/molbev/msw038" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline;text-underline-offset:3px">Mönttinen <em>et al.</em> (2016)</a> nas polimerases de ácido nucleico (EC 2.7.7.*),
       com correção crítica do erro de cadeia presente no relatório original gerado em <code style="font-family:var(--ff-mono);background:var(--bg-2);padding:0.1rem 0.4rem;border-radius:4px;font-size:0.85em">277.pplx.app</code>.
     </p>
     <div class="hero-meta reveal in">
@@ -915,6 +873,10 @@ footer .footer-meta { margin-top: 0.5rem; color: var(--text-faint); font-size: 0
       <div class="item">
         <span class="label">Software</span>
         <span class="value">TM-align v20220412</span>
+      </div>
+      <div class="item">
+        <span class="label">Paper</span>
+        <span class="value"><a href="https://doi.org/10.1093/molbev/msw038" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline;text-underline-offset:3px">Mönttinen 2016 ↗</a></span>
       </div>
     </div>
   </div>
@@ -1060,79 +1022,6 @@ footer .footer-meta { margin-top: 0.5rem; color: var(--text-faint); font-size: 0
 </div>
 </section>
 
-<!-- ════════════════ COMPARISON TABLE ════════════════ -->
-<section id="table">
-<div class="container">
-  <div class="eyebrow">Contestação quantitativa</div>
-  <h2>O que <em>muda</em> ao corrigir os erros do relatório original.</h2>
-  <p class="section-lead">
-    Comparação item-por-item entre o relatório gerado em <em>277.pplx.app</em> / biomni
-    e esta reanálise local com cadeia correta e definição de core mais informativa.
-  </p>
-  <div class="compare-card reveal">
-    <table class="compare">
-      <thead>
-        <tr>
-          <th>Métrica</th>
-          <th>Relatório original</th>
-          <th>Esta análise</th>
-          <th>Causa</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Cadeia RNAP (1HQM)</td>
-          <td><span class="v-err">B · α · 229 Cα · sem palm</span></td>
-          <td><span class="v-new">C · β · 997 Cα · com palm</span></td>
-          <td><span class="v-cause">Erro de cadeia</span></td>
-        </tr>
-        <tr>
-          <td>TM NTase ↔ RNAP</td>
-          <td><span class="v-old">0.242</span></td>
-          <td><span class="v-new">0.315  (+30%)</span></td>
-          <td><span class="v-cause">Cadeia errada</span></td>
-        </tr>
-        <tr>
-          <td>Core universal (6/6 folds)</td>
-          <td><span class="v-old">"1 resíduo — artefato"</span></td>
-          <td><span class="v-new">4 resíduos: Phe34, Val35, Lys197, Ala199</span></td>
-          <td><span class="v-cause">Cadeia + interpretação</span></td>
-        </tr>
-        <tr>
-          <td>Core ≥ 5/6</td>
-          <td><span class="v-old">32 resíduos</span></td>
-          <td><span class="v-new">48 resíduos</span></td>
-          <td><span class="v-cause">Single-rep vs multi-rep</span></td>
-        </tr>
-        <tr>
-          <td>ASP catalíticos no core</td>
-          <td><span class="v-old">Não reportado</span></td>
-          <td><span class="v-new">Asp22 (5/6), Asp33 (5/6)</span></td>
-          <td><span class="v-cause">Omissão biológica</span></td>
-        </tr>
-        <tr>
-          <td>Status PolX</td>
-          <td><span class="v-old">"Detectado" (binário TM ≥ 0.3)</span></td>
-          <td><span class="v-new">PARCIAL · 32/48 · 66.7%</span></td>
-          <td><span class="v-cause">Threshold inadequado</span></td>
-        </tr>
-        <tr>
-          <td>Baseline HMM vs TM-align</td>
-          <td><span class="v-old">HMM-de-7-seqs (strawman)</span></td>
-          <td><span class="v-new">baseline correto = HHsearch</span></td>
-          <td><span class="v-cause">Comparação injusta</span></td>
-        </tr>
-        <tr>
-          <td>Superfamílias de Mönttinen</td>
-          <td><span class="v-old">"M7" (rótulo fabricado)</span></td>
-          <td><span class="v-new">5 superfamílias (publicação original)</span></td>
-          <td><span class="v-cause">Inexistente na literatura</span></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-</section>
 
 <!-- ════════════════ METHODS ════════════════ -->
 <section id="methods">
@@ -1267,20 +1156,21 @@ footer .footer-meta { margin-top: 0.5rem; color: var(--text-faint); font-size: 0
 
   <div class="phylo-explorer reveal">
     <div class="phylo-explorer-header">
-      <div style="flex:1; min-width: 280px">
+      <div class="phylo-stats" id="phylo-stats"></div>
+      <div>
         <label class="phylo-label" for="phylo-select">Escolha uma família Pfam</label>
         <select id="phylo-select"></select>
       </div>
-      <div class="phylo-stats" id="phylo-stats"></div>
     </div>
     <div class="phylo-tree-wrap">
       <svg id="phylo-tree"></svg>
     </div>
     <div class="phylo-legend">
-      <span class="legend-item"><div class="legend-sw" style="background:#d4dcf5"></div>Sequência focal (família)</span>
-      <span class="legend-item"><div class="legend-sw" style="background:#f06292"></div>Outgroup (rótulo <code style="font-family:var(--ff-mono);background:transparent;padding:0;font-size:0.9em">OG_PFxxxxx_…</code>)</span>
-      <span class="legend-item"><div class="legend-sw" style="background:#f5c518"></div>Ramo com suporte ≥ 0.9 (SH-aLRT) ou UFB ≥ 90</span>
-      <span class="legend-item"><div class="legend-sw" style="background:#818cf8"></div>Ramo com suporte 0.7–0.9</span>
+      <span class="legend-item"><div class="legend-sw" style="background:#d4dcf5"></div>Sequência focal (família) → UniProt</span>
+      <span class="legend-item"><div class="legend-sw" style="background:#f06292"></div>Outgroup: código Pfam → InterPro · accession → UniProt</span>
+      <span class="legend-item"><div class="legend-sw" style="background:#f5c518"></div>Suporte ≥ 0.9 / UFB ≥ 90 (ramo + valor)</span>
+      <span class="legend-item"><div class="legend-sw" style="background:#818cf8"></div>Suporte 0.7–0.9 (ramo + valor)</span>
+      <span class="legend-item"><div class="legend-sw" style="background:rgba(164,171,201,0.45)"></div>Suporte &lt; 0.7</span>
     </div>
   </div>
 </div>
@@ -1908,6 +1798,14 @@ function renderTree(svg, root, opts) {
         else if (norm >= 0.7) cls += ' med-sup';
       }
       parts.push(`<line class="${cls}" x1="${parentX}" y1="${y}" x2="${x}" y2="${y}"/>`);
+      // Support value label near the node end of the branch
+      if (n.children.length > 0 && sup != null) {
+        const displaySup = sup > 1.0 ? sup.toFixed(0) : sup.toFixed(2);
+        const supColor = sup > 1.0
+          ? (sup >= 90 ? 'rgba(245,197,24,0.85)' : sup >= 70 ? 'rgba(129,140,248,0.75)' : 'rgba(164,171,201,0.45)')
+          : (sup >= 0.9 ? 'rgba(245,197,24,0.85)' : sup >= 0.7 ? 'rgba(129,140,248,0.75)' : 'rgba(164,171,201,0.45)');
+        parts.push(`<text x="${x - 3}" y="${y - 3}" text-anchor="end" font-family="JetBrains Mono" font-size="7" fill="${supColor}" pointer-events="none">${displaySup}</text>`);
+      }
     }
     if (n.children.length) {
       const ys = n.children.map(c => yScale(c.y));
@@ -1918,22 +1816,32 @@ function renderTree(svg, root, opts) {
   }
   drawBranches(root, null);
 
-  // Draw leaf labels (clickable → UniProt)
+  // Draw leaf labels — focal → UniProt; outgroup: PF code → InterPro, acc → UniProt
   for (const leaf of leaves) {
     const x = xScale(leaf.depth);
     const y = yScale(leaf.y);
     const name = leaf.name || '';
     const isOG = name.startsWith('OG_');
-    let display = name;
-    let acc = name;
+
     if (isOG) {
       const m = name.match(/^OG_(PF\d+)_(.+)$/);
-      if (m) { display = `${m[1]} · ${m[2]}`; acc = m[2]; }
+      if (m) {
+        const pfAcc  = m[1];
+        const seqAcc = m[2].replace(/[^A-Za-z0-9_]/g, '');
+        const interproUrl = `https://www.ebi.ac.uk/interpro/entry/pfam/${pfAcc}/`;
+        const uniprotUrl  = `https://www.uniprot.org/uniprotkb/${seqAcc}/entry`;
+        // PF code → InterPro (rose)
+        parts.push(`<a href="${interproUrl}" target="_blank" rel="noopener"><text class="leaf-label outgroup" x="${x + 4}" y="${y + leafFont * 0.35}" style="fill:#f06292"><title>${pfAcc} — InterPro</title>${pfAcc}</text></a>`);
+        // accession → UniProt (muted)
+        parts.push(`<a href="${uniprotUrl}" target="_blank" rel="noopener"><text class="leaf-label outgroup" x="${x + 46}" y="${y + leafFont * 0.35}" style="fill:#a4abc9"><title>${seqAcc} — UniProt</title>· ${seqAcc}</text></a>`);
+      } else {
+        parts.push(`<text class="leaf-label outgroup" x="${x + 4}" y="${y + leafFont * 0.35}">${name}</text>`);
+      }
+    } else {
+      const safeAcc = name.replace(/[^A-Za-z0-9_]/g, '');
+      const url = `https://www.uniprot.org/uniprotkb/${safeAcc}/entry`;
+      parts.push(`<a href="${url}" target="_blank" rel="noopener"><text class="leaf-label focal" x="${x + 4}" y="${y + leafFont * 0.35}"><title>${name} — UniProt</title>${name}</text></a>`);
     }
-    const safeAcc = acc.replace(/[^A-Za-z0-9_]/g, '');
-    const url = `https://www.uniprot.org/uniprotkb/${safeAcc}/entry`;
-    parts.push(`<a href="${url}" target="_blank" rel="noopener"><text class="leaf-label ${isOG ? 'outgroup' : 'focal'}"
-      x="${x + 4}" y="${y + leafFont * 0.35}"><title>${name} — abrir no UniProt</title>${display}</text></a>`);
   }
 
   // Scale bar
