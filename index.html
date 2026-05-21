@@ -919,9 +919,10 @@ footer .footer-meta { margin-top: 0.5rem; color: var(--text-faint); font-size: 0
   gap: 1rem;
   overflow-y: auto;
 }
+.struct-info-entry { display: flex; flex-direction: column; gap: 0.2rem; }
 .struct-info-panel .fold-name {
   font-family: var(--ff-display);
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1;
@@ -2403,9 +2404,8 @@ const TM_MATRICES = {
   RdRp: { t: [-28.8252,-71.6525,-16.5141], u: [[ 0.7589, 0.2889, 0.5836],[-0.3844, 0.9221, 0.0434],[-0.5256,-0.2573, 0.8109]] },
 };
 
-let mol3dViewer   = null;
-let mol3dLoaded   = false;
-let structCurrentFold = null;
+let mol3dViewer = null;
+let mol3dLoaded = false;
 
 function load3DmolScript(cb) {
   if (window.$3Dmol) { cb(); return; }
@@ -2439,139 +2439,124 @@ function applyTMMatrix(model, mat) {
   });
 }
 
-function loadFoldStructure(fold) {
-  if (!mol3dLoaded) return;
-  const s = FOLD_META[fold];
-  if (!s) return;
-  structCurrentFold = fold;
+// Active models map: fold → GLModel
+const activeModels = {};
 
-  const loading = document.getElementById('struct-loading');
-  loading.style.display = 'flex';
-  loading.textContent   = `Carregando ${s.pdb}…`;
+function toggleFold(fold) {
+  load3DmolScript(() => {
+    if (!mol3dLoaded) initMolViewer();
 
-  const color          = FOLD_COLORS[fold];
-  const [pdbId, chain] = s.pdb.split('-');
-  const absent         = ABSENT_BY_FOLD[fold] || new Set();
-  const mat            = TM_MATRICES[fold] || null;  // null for NTase (reference)
+    const btn    = document.querySelector(`.struct-fold-btn[data-fold="${fold}"]`);
+    const color  = FOLD_COLORS[fold];
+    const loading = document.getElementById('struct-loading');
 
-  mol3dViewer.clear();
-
-  $3Dmol.download(`pdb:${pdbId}`, mol3dViewer, { multimodel: false }, function() {
-    loading.style.display = 'none';
-
-    const model = mol3dViewer.getModel();
-
-    // ── remove all chains except the relevant one ────────────────
-    const offChain = model.selectedAtoms({}).filter(a => a.chain !== chain);
-    if (offChain.length) model.removeAtoms(offChain);
-
-    // ── apply TM-align rotation to superpose onto NTase frame ────
-    if (mat) applyTMMatrix(model, mat);
-
-    // dim backbone
-    mol3dViewer.setStyle({ chain }, { cartoon: { color: '#1e1e35', opacity: 0.45 } });
-
-    if (fold === 'NTase') {
-      // ── reference: highlight each core residue ──────────────────
-      const present = CORE_RESNUMS.filter(r => !absent.has(r)
-                        && !CORE_CATALYTIC.includes(r) && !CORE_UNIVERSAL.includes(r));
-      if (present.length)
-        mol3dViewer.setStyle({ chain, resi: present },
-          { cartoon: { color, opacity: 0.7 },
-            sphere:  { color, radius: 0.45, opacity: 0.9 } });
-      if (CORE_UNIVERSAL.length)
-        mol3dViewer.setStyle({ chain, resi: CORE_UNIVERSAL },
-          { cartoon: { color: '#f0f1f7', opacity: 0.9 },
-            sphere:  { color: '#f0f1f7', radius: 0.55, opacity: 1 } });
-      if (CORE_CATALYTIC.length)
-        mol3dViewer.setStyle({ chain, resi: CORE_CATALYTIC },
-          { cartoon: { color: '#f5c518', opacity: 1 },
-            sphere:  { color: '#f5c518', radius: 0.65, opacity: 1 },
-            stick:   { colorscheme: 'yellowCarbon', radius: 0.15 } });
-      mol3dViewer.zoomTo({ chain, resi: CORE_RESNUMS });
-    } else {
-      // ── other folds: dim backbone + fold-colored cartoon ─────────
-      mol3dViewer.setStyle({ chain }, { cartoon: { color, opacity: 0.82 } });
-      mol3dViewer.zoomTo({ chain });
+    // ── Deactivate ───────────────────────────────────────────────
+    if (activeModels[fold]) {
+      mol3dViewer.removeModel(activeModels[fold]);
+      delete activeModels[fold];
+      btn.classList.remove('active');
+      btn.style.background = '';
+      btn.style.color      = '';
+      mol3dViewer.render();
+      refreshInfoPanel();
+      return;
     }
 
-    mol3dViewer.render();
-    updateStructInfoPanel(fold, pdbId, chain);
+    // ── Activate: load structure ─────────────────────────────────
+    const s              = FOLD_META[fold];
+    const [pdbId, chain] = s.pdb.split('-');
+    const absent         = ABSENT_BY_FOLD[fold] || new Set();
+    const mat            = TM_MATRICES[fold] || null;
+
+    loading.style.display  = 'flex';
+    loading.textContent    = `Carregando ${s.pdb}…`;
+    btn.style.opacity      = '0.5';
+
+    $3Dmol.download(`pdb:${pdbId}`, mol3dViewer, {}, function(model) {
+      loading.style.display = 'none';
+      btn.style.opacity     = '1';
+
+      // Remove other chains
+      const offChain = model.selectedAtoms({}).filter(a => a.chain !== chain);
+      if (offChain.length) model.removeAtoms(offChain);
+
+      // Apply TM-align rotation onto NTase frame
+      if (mat) applyTMMatrix(model, mat);
+
+      // Dim backbone
+      mol3dViewer.setStyle({ model }, { cartoon: { color, opacity: 0.28 } });
+
+      // Core residues: fold color + spheres (present only)
+      const corePresent = CORE_RESNUMS.filter(r => !absent.has(r));
+      if (corePresent.length)
+        mol3dViewer.setStyle(
+          { model, resi: corePresent },
+          { cartoon: { color, opacity: 0.75 },
+            sphere:  { color, radius: 0.48, opacity: 0.92 } }
+        );
+
+      activeModels[fold] = model;
+      btn.classList.add('active');
+      btn.style.background = color;
+      btn.style.color      = '#07070c';
+
+      mol3dViewer.zoomTo();
+      mol3dViewer.render();
+      refreshInfoPanel();
+    });
   });
 }
 
-function updateStructInfoPanel(fold, pdbId, chain) {
-  const panel   = document.getElementById('struct-info-panel');
-  const p       = PRESENCE.find(x => x.fold === fold);
-  const m       = FOLD_META[fold];
-  const color   = FOLD_COLORS[fold];
-  const pct     = p ? p.pct : 100;
-  const present = p ? p.present : 48;
-  const status  = m.ref ? 'Referência' : pct >= 70 ? 'Presente' : 'Parcial';
+function refreshInfoPanel() {
+  const panel  = document.getElementById('struct-info-panel');
+  const folds  = Object.keys(activeModels);
+  const loading = document.getElementById('struct-loading');
 
-  panel.innerHTML = `
-    <div>
-      <div class="fold-name" style="color:${color}">${fold}</div>
-      <div class="pdb-code">${m.pdb} · ${m.desc}</div>
-    </div>
-    <div>
-      <div style="display:flex;justify-content:space-between;font-family:var(--ff-mono);font-size:0.78rem;margin-bottom:0.4rem">
-        <span style="color:var(--text-mute)">Cobertura do core</span>
-        <span style="color:${color};font-weight:600">${pct.toFixed(1)}%</span>
-      </div>
-      <div class="struct-coverage-bar">
-        <div class="struct-coverage-fill" style="width:${pct}%;background:${color}"></div>
-      </div>
-      <div style="font-family:var(--ff-mono);font-size:0.72rem;color:var(--text-mute);margin-top:0.4rem">
-        ${present} / 48 resíduos · ${status}
-      </div>
-    </div>
-    ${p && p.absent.length ? `
-    <div>
-      <div style="font-family:var(--ff-mono);font-size:0.68rem;color:var(--text-faint);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem">Ausentes no core</div>
-      <div style="font-family:var(--ff-mono);font-size:0.72rem;color:var(--text-mute);line-height:1.8">
-        ${p.absent.map(r => `<span style="background:var(--bg-3);padding:0.1rem 0.35rem;border-radius:3px;margin:0.1rem;display:inline-block">${r}</span>`).join('')}
-      </div>
-    </div>` : ''}
-    <div class="struct-legend">
-      ${fold === 'NTase' ? `
-        <div class="struct-legend-item"><div class="struct-swatch" style="background:#f5c518"></div>ASP catalítico (Asp22 · Asp33)</div>
-        <div class="struct-legend-item"><div class="struct-swatch" style="background:#f0f1f7"></div>Universal 6/6 folds</div>
-        <div class="struct-legend-item"><div class="struct-swatch" style="background:${color}"></div>Core presente</div>
-        <div class="struct-legend-item"><div class="struct-swatch" style="background:#1e1e35;border:1px solid var(--border)"></div>Backbone (fora do core)</div>
-      ` : `
-        <div class="struct-legend-item"><div class="struct-swatch" style="background:${color}"></div>Backbone (${fold})</div>
-        <div style="color:var(--text-faint);font-size:0.68rem">Mapeamento de resíduos individuais disponível apenas para a referência 1VFG-A (NTase).</div>
-      `}
-      <a href="https://www.rcsb.org/structure/${pdbId}" target="_blank" rel="noopener"
-        style="color:var(--indigo);text-decoration:none;font-size:0.72rem;margin-top:0.2rem">
-        RCSB ${pdbId} ↗
-      </a>
-    </div>
-  `;
+  if (!folds.length) {
+    panel.innerHTML = '';
+    loading.style.display  = 'flex';
+    loading.textContent    = 'Clique em um fold para carregar a estrutura';
+    return;
+  }
+
+  panel.innerHTML = folds.map(fold => {
+    const p     = PRESENCE.find(x => x.fold === fold);
+    const m     = FOLD_META[fold];
+    const color = FOLD_COLORS[fold];
+    const pct   = p ? p.pct : 100;
+    const cnt   = p ? p.present : 48;
+    const [pdbId] = m.pdb.split('-');
+    return `
+      <div class="struct-info-entry">
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <span class="fold-name" style="color:${color}">${fold}</span>
+          <a href="https://www.rcsb.org/structure/${pdbId}" target="_blank" rel="noopener"
+            style="color:var(--indigo);text-decoration:none;font-size:0.7rem">${pdbId} ↗</a>
+        </div>
+        <div class="pdb-code">${m.desc}</div>
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-top:0.4rem">
+          <div class="struct-coverage-bar" style="flex:1">
+            <div class="struct-coverage-fill" style="width:${pct}%;background:${color}"></div>
+          </div>
+          <span style="font-family:var(--ff-mono);font-size:0.72rem;color:${color};font-weight:600;white-space:nowrap">${cnt}/48</span>
+        </div>
+        ${p && p.absent.length ? `<div style="font-family:var(--ff-mono);font-size:0.68rem;color:var(--text-faint);margin-top:0.25rem">
+          ausentes: ${p.absent.map(r=>`<span style="background:var(--bg-3);padding:0.05rem 0.3rem;border-radius:3px">${r}</span>`).join(' ')}
+        </div>` : ''}
+      </div>`;
+  }).join('<hr style="border:none;border-top:1px solid var(--border);margin:0.6rem 0">');
 }
 
 function setupStructViewer() {
   const bar = document.getElementById('struct-fold-bar');
   if (!bar) return;
-
   FOLDS_ORDER.forEach(fold => {
     const btn = document.createElement('button');
-    btn.className   = 'struct-fold-btn';
-    btn.textContent = fold;
+    btn.className    = 'struct-fold-btn';
+    btn.textContent  = fold;
     btn.dataset.fold = fold;
     btn.style.setProperty('--fold-c', FOLD_COLORS[fold]);
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.struct-fold-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      btn.style.background = FOLD_COLORS[fold];
-      btn.style.color      = '#07070c';
-
-      load3DmolScript(() => {
-        if (!mol3dLoaded) initMolViewer();
-        loadFoldStructure(fold);
-      });
-    });
+    btn.addEventListener('click', () => toggleFold(fold));
     bar.appendChild(btn);
   });
 }
